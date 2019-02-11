@@ -1,15 +1,15 @@
 /* eslint-disable global-require */
 /* eslint-disable no-undef */
-import DashboardLabels from './Labels';
+import DashboardLabels from '../labels/screensLabel';
 
 items = [
   {
     label: DashboardLabels.labels.START,
-    style: { backgroundColor: '#BFBF02' },
+    style: { backgroundColor: '#8208D4' },
     image: require('../../assets/images/start.png'),
   },
   { label: DashboardLabels.labels.ACHIEVEMENTS,
-    style: { backgroundColor: '#129FC9' },
+    style: { backgroundColor: '#b30000' },
     image: require('../../assets/images/trophie.png'),
   },
   { label: DashboardLabels.labels.CHALLENGE,
@@ -17,23 +17,23 @@ items = [
     image: require('../../assets/images/challenge.png'),
   },
   { label: DashboardLabels.labels.TOPSCORE,
-    style: { backgroundColor: '#385AF2' },
+    style: { backgroundColor: '#3D91F2' },
     image: require('../../assets/images/topscore.png'),
   },
   { label: DashboardLabels.labels.SETTINGS,
-    style: { backgroundColor: '#8208D4' },
+    style: { backgroundColor: '#ff8080' },
     image: require('../../assets/images/settings.png'),
   },
-  { label: DashboardLabels.labels.MYPROFILE,
+  { label: DashboardLabels.labels.PROFILE,
     style: { backgroundColor: '#F77043' },
     image: require('../../assets/images/profil.png'),
   },
-  { label: DashboardLabels.labels.MYFRIENDS,
-    style: { backgroundColor: '#3D91F2' },
+  { label: DashboardLabels.labels.FRIENDS,
+    style: { backgroundColor: '#34cbcb' },
     image: require('../../assets/images/friends.png'),
   },
   { label: DashboardLabels.labels.DISCONNECT,
-    style: { backgroundColor: '#BF04B9' },
+    style: { backgroundColor: '#ff0080' },
     image: require('../../assets/images/disconnect.png'),
   }
 ];

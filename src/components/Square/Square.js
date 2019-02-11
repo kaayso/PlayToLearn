@@ -5,7 +5,7 @@ import Fonts from '../../utils/fonts/Fonts';
 
 const Square = props => (
           <TouchableHighlight
-            onPress={() => props.navigation.navigate(props.label)}
+            onPress={() => props.navigation.navigate(props.label, { name: 'J.Smith' })}
             underlayColor="#E4E4E4"
             activeOpacity={0.1}
             style={[styles.square, props.style]}
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3DBFF2',
     width: '100%',
     height: 200,
-    borderRadius: 15,
+    borderRadius: 65,
   },
   labelContainer: {
     flex: 1,
@@ -37,10 +37,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   labelText: {
-    fontSize: 17,
+    fontSize: 16,
     color: '#fff',
     fontWeight: 'normal',
-    fontFamily: Fonts.MontserratBold,
+    fontFamily: Fonts.InknutAntiquaSemiBold,
+    paddingTop: 5
   }
 });
 
