@@ -8,4 +8,5 @@ export default {
   UbuntuMonoItalic: 'UbuntuMono-Italic',
   UbuntuMonoBold: 'UbuntuMono-Bold',
   NixieOne: 'NixieOne-Regular',
+  InknutAntiquaSemiBold: 'InknutAntiqua-SemiBold'
 };

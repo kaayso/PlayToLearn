@@ -7,11 +7,11 @@ import MenuButton from '../../components/MenuButton/MenuButton';
 import NavBarButton from '../../components/NavBarButton/NavBarButton';
 import ScreensLabel from '../../utils/labels/screensLabel';
 
-class Home extends Component {
+class Friends extends Component {
   static navigationOptions ={
     header: null
   };
-  
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -32,7 +32,7 @@ class Home extends Component {
           }
         />
         <View style={styles.container}>
-          <Text> Home screen </Text>
+          <Text> Friends screen </Text>
         </View>
       </View>
       
@@ -48,9 +48,7 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Colors.blueThemeColor,
-    height: 56,
-    paddingBottom: 15
   }
 });
 
-export default withNavigation(Home);
+export default withNavigation(Friends);
