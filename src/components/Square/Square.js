@@ -6,8 +6,8 @@ import Fonts from '../../utils/fonts/Fonts';
 const Square = props => (
           <TouchableHighlight
             onPress={() => props.navigation.navigate(props.label, { name: 'J.Smith' })}
-            underlayColor="#E4E4E4"
             activeOpacity={0.1}
+            underlayColor='transparent'
             style={[styles.square, props.style]}
           >
             <View style={styles.labelContainer}>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3DBFF2',
     width: '100%',
     height: 200,
-    borderRadius: 65,
+    borderRadius: 15,
   },
   labelContainer: {
     flex: 1,

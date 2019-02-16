@@ -8,5 +8,9 @@ export default {
   UbuntuMonoItalic: 'UbuntuMono-Italic',
   UbuntuMonoBold: 'UbuntuMono-Bold',
   NixieOne: 'NixieOne-Regular',
-  InknutAntiquaSemiBold: 'InknutAntiqua-SemiBold'
+  InknutAntiquaSemiBold: 'InknutAntiqua-SemiBold',
+  OPENSANSBOLD: 'OpenSans-Bold',
+  OPENSANSSEMIBOLD: 'OpenSans-SemiBold',
+  OPENSANSREGULAR: 'OpenSans-Regular',
+  OPENSANSLIGHT: 'OpenSans-Light',
 };

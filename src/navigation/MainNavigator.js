@@ -17,7 +17,7 @@ import MenuDrawer from '../components/MenuDrawer/MenuDrawer';
 import ScreensLabel from '../utils/labels/screensLabel';
 
 const optionsNavigation = {
-  initialRouteName: ScreensLabel.labels.DASHBOARD,
+  initialRouteName: ScreensLabel.labels.START,
   defaultNavigationOptions: {
     headerStyle: {
       backgroundColor: Colors.blueThemeColor,
