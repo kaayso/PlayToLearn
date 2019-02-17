@@ -4,23 +4,30 @@ import {
     View,
     Text,
     StyleSheet,
-    Modal,
     TouchableHighlight
 } from 'react-native';
-import Fonts from '../../utils/fonts/Fonts';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Overlay } from 'react-native-elements';
+import Fonts from '../../utils/fonts/Fonts';
 
 const ChoiceDifficultyModal = props => (
-    <Modal
-        animationType="slide"
-        transparent={false}
-        visible={props.modalVisible}
+    < Overlay
+        isVisible={props.modalVisible}
+        onBackdropPress={props.modalVisibility}
+        windowBackgroundColor="rgba(0, 0, 0, .8)"
     >
         <View
             style={styles.container}
         >
             <View style={styles.content}>
-                <Text style={styles.title}>Choose a difficulty</Text>
+                <View style={{ alignItems: 'flex-end', marginTop: 13 }}>
+                    <Icon
+                        name='close' size={30}
+                        onPress={props.modalVisibility}
+                        color='gray'
+                    />
+                    <Text style={styles.title}>Choose a difficulty</Text>
+                </View>
                 <TouchableHighlight
                     onPress={props.modalVisibility}
                     style={styles.textContainer}
@@ -29,27 +36,25 @@ const ChoiceDifficultyModal = props => (
                 </TouchableHighlight>
                 <TouchableHighlight
                     onPress={props.modalVisibility}
+                    style={styles.textContainer}
                 >
                     <Text style={styles.difficultyText}>Medium</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     onPress={props.modalVisibility}
+                    style={styles.textContainer}
                 >
                     <Text style={styles.difficultyText}>Hard</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     onPress={props.modalVisibility}
+                    style={styles.textContainer}
                 >
                     <Text style={styles.difficultyText}>Expert</Text>
                 </TouchableHighlight>
-                <Icon
-                    style={{ margin: 10 }}
-                    name='close' size={40}
-                    onPress={props.modalVisibility}
-                />
             </View>
         </View>
-    </Modal>
+    </Overlay >
 );
 export default ChoiceDifficultyModal;
 
@@ -57,24 +62,24 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginTop: 100
     },
     content: {
-        alignItems: 'center',
     },
     title: {
         fontSize: 22,
-        fontFamily: Fonts.OPENSANSREGULAR
+        fontFamily: Fonts.OPENSANSLIGHT,
+        padding: 50,
     },
     difficultyText: {
         fontSize: 15,
-        fontFamily: Fonts.OPENSANSREGULAR,
         color: '#000',
-        padding: 20,
-        margin: 5,
+        fontFamily: Fonts.OPENSANSREGULAR,
     },
     textContainer: {
-        backgroundColor: 'red',
+        borderBottomWidth: 1,
+        borderBottomColor: '#E4E4E4',
+        alignItems: 'center',
+        padding: 20,
     }
 });
 

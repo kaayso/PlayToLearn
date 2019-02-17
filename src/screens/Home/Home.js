@@ -11,6 +11,7 @@ import QuizList from '../../components/QuizList/QuizList';
 import QuizItem from '../../assets/mocks/Quiz';
 import GameCat from '../../utils/logo/gamecategories';
 import ChoiceDifficultyModal from '../../components/ChoiceDifficultyModal/ChoiceDifficultyModal';
+import QuizListButton from '../../components/QuizListButton/QuizListButton';
 
 class Home extends Component {
   static navigationOptions = {
@@ -19,7 +20,8 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      openQList: false
     };
   }
   setModalVisible() {
@@ -27,9 +29,12 @@ class Home extends Component {
       modalVisible: !this.state.modalVisible
     });
   }
+  setListVisibilty() {
+    this.setState({
+      openQList: !this.state.openQList
+    });
+  }
   render() {
-    console.log(this.state.modalVisible);
-
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -48,47 +53,63 @@ class Home extends Component {
             />
           }
         />
-        <ScrollView>
-          <View style={styles.container}>
-            <ChoiceDifficultyModal
-              modalVisibility={() => this.setModalVisible()}
-              modalVisible={this.state.modalVisible}
-            />
-            <View style={styles.playButtonContainer}>
-              <PlayButton modalVisibility={() => this.setModalVisible()} />
-            </View>
-            <View>
-              <QuizList data={QuizItem} title="New games" logo={GameCat.NEW} />
-              <QuizList data={QuizItem} title="Most played games" logo={GameCat.POPULAR} />
-              <QuizList data={QuizItem} title="Recommended games" logo={GameCat.RECOMMENDED} />
-            </View>
+        <View
+          style={styles.container}
+        >
+          <ChoiceDifficultyModal
+            modalVisibility={() => this.setModalVisible()}
+            modalVisible={this.state.modalVisible}
+          />
+          <View style={styles.playButtonContainer}>
+            <PlayButton modalVisibility={() => this.setModalVisible()} />
           </View>
-        </ScrollView>
-
+          <View
+           style={[
+              styles.openQuizContainer,
+              { alignItems: `${this.state.openQList ? 'flex-start' : 'center'}` }
+            ]}
+          >
+            <QuizListButton
+              isVisible={this.state.openQList}
+              listVisibilty={() => this.setListVisibilty()}
+            />
+          </View>
+          {
+            this.state.openQList &&
+            <ScrollView>
+              <View>
+                <QuizList data={QuizItem} title="New games" logo={GameCat.NEW} />
+                <QuizList data={QuizItem} title="Most played games" logo={GameCat.POPULAR} />
+                <QuizList data={QuizItem} title="Recommended games" logo={GameCat.RECOMMENDED} />
+              </View>
+            </ScrollView>
+          }
+        </View>
       </View>
-
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    flexDirection: 'column',
+    flex: 1,
     backgroundColor: '#fff',
-  },
-  playButtonContainer: {
-    padding: 40,
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-    backgroundColor: '#F2F2F2',
+    justifyContent: 'center',
   },
   headerStyle: {
     backgroundColor: Colors.blueThemeColor,
     height: 56,
     paddingBottom: 15
   },
+  playButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  openQuizContainer: {
+    width: '100%',
+  }
 });
 
 export default withNavigation(Home);

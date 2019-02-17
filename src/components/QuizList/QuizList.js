@@ -2,6 +2,7 @@ import { FlatList, View, StyleSheet, Text, Image } from 'react-native';
 import React, { Component } from 'react';
 import QuizItem from '../QuizItem/QuizItem';
 import Fonts from '../../utils/fonts/Fonts';
+import Colors from '../../constants/Colors';
 
 export default class QuizList extends Component {
 
@@ -36,7 +37,7 @@ export default class QuizList extends Component {
                         <View 
                             style={{
                                 width: 5,
-                                backgroundColor: '#fff'
+                                backgroundColor: Colors.blueThemeColor
                             }}
                         />}
                         data={this.shuffle(this.props.data)}
@@ -50,26 +51,24 @@ export default class QuizList extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
-        marginBottom: 30,
+        backgroundColor: Colors.blueBoldThemeColors,
+        paddingBottom: 10,
     },
     list: { 
         height: 110,
         padding: 5,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.blueBoldThemeColors,
     },
     title: {
         fontSize: 14,
-        color: '#000',
-        fontFamily: Fonts.OPENSANSSEMIBOLD
+        color: '#F2F2F2',
+        fontFamily: Fonts.OPENSANSREGULAR,
     },
     textContainer: {
         alignItems: 'center',
         flexDirection: 'row',
-        borderTopWidth: 1,
-        borderColor: '#E4E4E4',
         paddingBottom: 3,
-        paddingTop: 5,
+        paddingTop: 8,
     },
     logo: {
         height: 28,

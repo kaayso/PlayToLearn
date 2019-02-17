@@ -8,9 +8,8 @@ export default class QuizItem extends Component {
             <LinearGradient
                 colors={
                     [
-                        '#63004c',
-                        '#3a012d',
-                        '#23011b',
+                        '#E4E4E4',
+                        '#fff',
                     ]
                 }
                 style={styles.container}
@@ -28,8 +27,8 @@ const styles = StyleSheet.create({
         width: 100,
     },
     logo: {
-        height: 70,
-        width: 70,
+        height: 80,
+        width: 80,
     }
 });
 

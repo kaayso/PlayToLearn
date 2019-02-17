@@ -3,7 +3,6 @@ import { View, Image, TouchableHighlight, StyleSheet } from 'react-native';
 import AppLogo from '../../utils/logo/playbutton';
 
 export default class PlayButton extends Component {
-  
   render() {
     return (
       <TouchableHighlight
@@ -20,7 +19,7 @@ export default class PlayButton extends Component {
 }
 const styles = StyleSheet.create({
   logo: {
-    height: 160,
-    width: 124,
+    height: 200,
+    width: 150,
   }
 });
