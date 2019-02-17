@@ -36,7 +36,7 @@ export default class QuizList extends Component {
                         ItemSeparatorComponent={() => 
                         <View 
                             style={{
-                                width: 5,
+                                width: 10,
                                 backgroundColor: Colors.blueThemeColor
                             }}
                         />}
@@ -52,7 +52,7 @@ export default class QuizList extends Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.blueBoldThemeColors,
-        paddingBottom: 10,
+        paddingBottom: 11,
     },
     list: { 
         height: 110,

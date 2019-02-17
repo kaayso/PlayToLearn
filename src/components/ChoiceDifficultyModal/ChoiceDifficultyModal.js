@@ -26,7 +26,7 @@ const ChoiceDifficultyModal = props => (
                         onPress={props.modalVisibility}
                         color='gray'
                     />
-                    <Text style={styles.title}>Choose a difficulty</Text>
+                    <Text style={styles.title}>Choose difficulty</Text>
                 </View>
                 <TouchableHighlight
                     onPress={props.modalVisibility}

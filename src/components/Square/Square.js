@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     fontWeight: 'normal',
-    fontFamily: Fonts.InknutAntiquaSemiBold,
+    fontFamily: Fonts.OPENSANSSEMIBOLD,
     paddingTop: 5
   }
 });

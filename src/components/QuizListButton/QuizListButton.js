@@ -11,8 +11,8 @@ const QuizListButton = (props) => (
         <View
             style={styles.button}
         >
-            <Icon name={props.isVisible ? 'expand-more' : 'expand-less'} size={30} />
-            <Text> {props.isVisible ? 'Hide games' : 'Show games'}</Text>
+            <Icon name={props.isVisible ? 'expand-more' : 'expand-less'} size={40} />
+            <Text style={styles.text}> {props.isVisible ? 'Hide games' : 'Show games'}</Text>
         </View>
     </TouchableHighlight>
 );
@@ -24,5 +24,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+    },
+    text: {
+        fontSize: 15,
     }
 });

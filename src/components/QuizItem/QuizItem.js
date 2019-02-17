@@ -9,6 +9,7 @@ export default class QuizItem extends Component {
                 colors={
                     [
                         '#E4E4E4',
+                        '#F2F2F2',
                         '#fff',
                     ]
                 }

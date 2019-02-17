@@ -10,7 +10,7 @@ export default class PlayButton extends Component {
         activeOpacity={0.4}
         onPress={this.props.modalVisibility}
       >
-        <View style={{ padding: 20 }}>
+        <View>
           <Image source={AppLogo.PLAY} style={styles.logo} />
         </View>
       </TouchableHighlight>

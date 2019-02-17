@@ -60,7 +60,12 @@ class Home extends Component {
             modalVisibility={() => this.setModalVisible()}
             modalVisible={this.state.modalVisible}
           />
-          <View style={styles.playButtonContainer}>
+          <View 
+            style={[
+              styles.playButtonContainer,
+              { paddingTop: this.state.openQList ? 10 : 180 }
+            ]}
+          >
             <PlayButton modalVisibility={() => this.setModalVisible()} />
           </View>
           <View
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   headerStyle: {
     backgroundColor: Colors.blueThemeColor,
