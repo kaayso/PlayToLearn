@@ -11,28 +11,6 @@ import avatarsManager from '../../utils/avatars/avatarsManager';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import InputValue from '../../components/InputValue/InputValue';
 
-import t from 'tcomb-form-native'; // 0.6.9
-
-const Form = t.form.Form;
-
-const User = t.struct({
-  Username: t.String,
-  Email: t.String,
-  Password: t.String,
-  PasswordConfirmation: t.String
-
-});
-const options = {
-  fields: {
-    email: {
-      error: 'Without an email address how are you going to reset your password when you forget it?'
-    },
-    password: {
-      error: 'Choose something you use on a dozen other sites or something you won\'t remember'
-    },
-
-  },
-};
 
 class Sttings extends Component {
   static navigationOptions ={
