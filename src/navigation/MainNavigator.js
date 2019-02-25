@@ -9,7 +9,7 @@ import Friends from '../screens/Friends/Friends';
 import Challenge from '../screens/Challenge/Challenge';
 import Dashboard from '../screens/Dashboard/Dashboard';
 import NotificationScreen from '../screens/Notifications/Notifications';
-
+import GameScreen from '../screens/Game/Game';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -17,7 +17,7 @@ import MenuDrawer from '../components/MenuDrawer/MenuDrawer';
 import ScreensLabel from '../utils/labels/screensLabel';
 
 const optionsNavigation = {
-  initialRouteName: ScreensLabel.labels.DASHBOARD,
+  initialRouteName: ScreensLabel.labels.START,
   defaultNavigationOptions: {
     headerStyle: {
       backgroundColor: Colors.blueThemeColor,
@@ -69,6 +69,12 @@ const navigator = createStackNavigator({
     screen: NotificationScreen,
     navigationOptions: {
       title: ScreensLabel.labels.NOTIFICATIONS
+    }
+  },
+  GameScreen: {
+    screen: GameScreen,
+    navigationOptions: {
+      header: null
     }
   }
 }, optionsNavigation);

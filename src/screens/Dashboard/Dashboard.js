@@ -11,7 +11,7 @@ export default class Dashboard extends Component {
     return (
       <ImageBackground
         style={{ width: '100%', height: '100%' }}
-        source={Bg.DASHBOARDBG}
+        source={Bg.GAMEBG}
       >
         <ScrollView>
           <FlatGrid

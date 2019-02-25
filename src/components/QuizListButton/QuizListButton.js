@@ -9,9 +9,15 @@ const QuizListButton = (props) => (
         onPress={(props.listVisibilty)}
     >
         <View
-            style={styles.button}
+            style={[
+                styles.button,
+                { flexDirection: `${props.isVisible ? 'row' : 'column'}` }
+            ]}
         >
-            <Icon name={props.isVisible ? 'expand-more' : 'expand-less'} size={40} />
+            <Icon
+                name={props.isVisible ? 'expand-more' : 'expand-less'}
+                size={28} style={styles.logo}
+            />
             <Text style={styles.text}> {props.isVisible ? 'Hide games' : 'Show games'}</Text>
         </View>
     </TouchableHighlight>
@@ -23,9 +29,15 @@ const styles = StyleSheet.create({
     button: {
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'row',
+        padding: 5
     },
     text: {
         fontSize: 15,
+    },
+    logo: {
+        backgroundColor: '#DF4723',
+        borderRadius: 15,
+        elevation: 5,
+        color: '#fff'
     }
 });

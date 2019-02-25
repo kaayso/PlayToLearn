@@ -48,7 +48,10 @@ class MenuDrawer extends Component {
                     <View style={styles.topLinks}>
                         <View style={styles.profile}>
                             <View style={styles.imgView}>
-                                <Image style={styles.img} source={avatarsManager.getAvatar('User05b')} />
+                                <Image
+                                    style={styles.img}
+                                    source={avatarsManager.getAvatar('User05b')}
+                                />
                             </View>
                             {<Text style={styles.username}>
                                 {this.props.navigation.getParam('name', 'J.Smith')}
@@ -122,13 +125,13 @@ const styles = StyleSheet.create({
     },
     linkText: {
         flex: 1,
-        fontSize: 16,
+        fontSize: 14,
         color: 'gray',
         padding: 6,
     },
     disconnectText: {
         flex: 1,
-        fontSize: 16,
+        fontSize: 14,
         color: 'gray',
         padding: 6,
     },

@@ -10,6 +10,7 @@ export default {
     DISCONNECT: 'Disconnect',
     START: 'Start',
     DASHBOARD: 'Dashboard',
-    NOTIFICATIONS: 'Notifications'
+    NOTIFICATIONS: 'Notifications',
+    GAME: 'GameScreen'
   },
 };

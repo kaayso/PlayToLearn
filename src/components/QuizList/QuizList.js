@@ -7,7 +7,7 @@ import Colors from '../../constants/Colors';
 export default class QuizList extends Component {
 
     /**
-     * TEMP :
+     * TEMPORAIRE :
      * shuffle an array list
      * @param {Array} list 
      */
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingBottom: 3,
         paddingTop: 8,
+        paddingLeft: 2
     },
     logo: {
         height: 28,
