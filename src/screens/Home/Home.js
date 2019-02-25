@@ -34,6 +34,11 @@ class Home extends Component {
       openQList: !this.state.openQList
     });
   }
+  handleChoice(difficulty) {
+    console.log(difficulty);
+    this.props.navigation.navigate(ScreensLabel.labels.GAME);
+    this.setModalVisible();
+  }
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -57,10 +62,11 @@ class Home extends Component {
           style={styles.container}
         >
           <ChoiceDifficultyModal
+            handleChoice={(difficulty) => this.handleChoice(difficulty)}
             modalVisibility={() => this.setModalVisible()}
             modalVisible={this.state.modalVisible}
           />
-          <View 
+          <View
             style={[
               styles.playButtonContainer,
               { paddingTop: this.state.openQList ? 10 : 180 }
@@ -69,7 +75,7 @@ class Home extends Component {
             <PlayButton modalVisibility={() => this.setModalVisible()} />
           </View>
           <View
-           style={[
+            style={[
               styles.openQuizContainer,
               { alignItems: `${this.state.openQList ? 'flex-start' : 'center'}` }
             ]}

@@ -1,62 +1,69 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     TouchableHighlight
 } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Overlay } from 'react-native-elements';
 import Fonts from '../../utils/fonts/Fonts';
+import Difficulty from '../../utils/game/difficultylabels';
 
-const ChoiceDifficultyModal = props => (
-    < Overlay
-        isVisible={props.modalVisible}
-        onBackdropPress={props.modalVisibility}
-        windowBackgroundColor="rgba(0, 0, 0, .8)"
-    >
-        <View
-            style={styles.container}
-        >
-            <View style={styles.content}>
-                <View style={{ alignItems: 'flex-end', marginTop: 13 }}>
-                    <Icon
-                        name='close' size={30}
-                        onPress={props.modalVisibility}
-                        color='gray'
-                    />
-                    <Text style={styles.title}>Choose difficulty</Text>
+
+class ChoiceDifficultyModal extends Component {
+    render() {
+        return (
+            < Overlay
+                isVisible={this.props.modalVisible}
+                onBackdropPress={this.props.modalVisibility}
+                windowBackgroundColor="rgba(0, 0, 0, .8)"
+            >
+                <View
+                    style={styles.container}
+                >
+                    <View style={styles.content}>
+                        <View style={{ alignItems: 'flex-end', marginTop: 13 }}>
+                            <Icon
+                                name='close' size={30}
+                                onPress={this.props.modalVisibility}
+                                color='gray'
+                            />
+                            <Text style={styles.title}>Choose difficulty</Text>
+                        </View>
+                        <TouchableHighlight
+                            onPress={() => this.props.handleChoice(Difficulty.EASY)}
+                            style={styles.textContainer}
+                        >
+                            <Text style={styles.difficultyText}>{Difficulty.EASY}</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            onPress={() => this.props.handleChoice(Difficulty.MEDIUM)}
+                            style={styles.textContainer}
+                        >
+                            <Text style={styles.difficultyText}>{Difficulty.MEDIUM}</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            onPress={() => this.props.handleChoice(Difficulty.HARD)}
+                            style={styles.textContainer}
+                        >
+                            <Text style={styles.difficultyText}>{Difficulty.HARD}</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            onPress={() => this.props.handleChoice(Difficulty.EXPERT)}
+                            style={styles.textContainer}
+                        >
+                            <Text style={styles.difficultyText}>{Difficulty.EXPERT}</Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
-                <TouchableHighlight
-                    onPress={props.modalVisibility}
-                    style={styles.textContainer}
-                >
-                    <Text style={styles.difficultyText}>Easy</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    onPress={props.modalVisibility}
-                    style={styles.textContainer}
-                >
-                    <Text style={styles.difficultyText}>Medium</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    onPress={props.modalVisibility}
-                    style={styles.textContainer}
-                >
-                    <Text style={styles.difficultyText}>Hard</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    onPress={props.modalVisibility}
-                    style={styles.textContainer}
-                >
-                    <Text style={styles.difficultyText}>Expert</Text>
-                </TouchableHighlight>
-            </View>
-        </View>
-    </Overlay >
-);
-export default ChoiceDifficultyModal;
+            </Overlay >
+        );
+    }
+}
+export default withNavigation(ChoiceDifficultyModal);
 
 const styles = StyleSheet.create({
     container: {
