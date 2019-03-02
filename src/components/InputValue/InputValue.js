@@ -7,8 +7,6 @@ const InputValue = (props) => (
 
 
     <View>
-
-
     <TextInput
       style={props.style}
       placeholder={props.placeholder}

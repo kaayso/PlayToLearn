@@ -60,17 +60,23 @@ class Sttings extends Component {
             </View>
 
             </View>
-            <View style={styles.container1}>
-            <InputValue style={{height: 40}} placeholder="Username" onChangeText={this.handleInput} />
-            <InputValue style={{height: 40}} placeholder="Email" onChangeText={this.handleInput} />
-            <InputValue style={{height: 40}} placeholder="Password" onChangeText={this.handleInput} />
-            <InputValue style={{height: 40}} placeholder="Password Confirmation" onChangeText={this.handleInput} />
+            <View>
+            <Text></Text>
+            <InputValue style={{height: 43, width:'70%', textAlign:"center", alignSelf: 'center', padding: 15, borderColor: 'gray', borderWidth: 1}} placeholder="Username" onChangeText={this.handleInput} />
+            <Text></Text>
+            <InputValue style={{height: 45, width:'70%', textAlign:"center", alignSelf: 'center', padding: 15, borderColor: 'gray', borderWidth: 1}} placeholder="Email" onChangeText={this.handleInput} />
+            <Text></Text>
+            <InputValue style={{height: 45, width:'70%', textAlign:"center", alignSelf: 'center', padding: 15, borderColor: 'gray', borderWidth: 1}} placeholder="Password" onChangeText={this.handleInput} />
+            <Text></Text>
+            <InputValue style={{height: 45, width:'70%', textAlign:"center", alignSelf: 'center', padding: 15, borderColor: 'gray', borderWidth: 1}} placeholder="Password Confirmation" onChangeText={this.handleInput} />
+            <Text></Text>
 
-
+            <View style={styles.button}>
             <Button
               title="UPDATE!"
               onPress={this.handleSubmit}
             />
+            </View>
 
              </View>
         </View>
@@ -84,6 +90,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  input: {
+
+    justifyContent: 'center',
+},
   container1: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -130,13 +140,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   button: {
-    height: 36,
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
-    borderRadius: 8,
+
+    height: 70,
+    width:'70%',
+
     marginBottom: 10,
-    alignSelf: 'stretch',
+    alignSelf: 'center',
     justifyContent: 'center'
   },
 
