@@ -8,10 +8,11 @@ import NavBarButton from '../../components/NavBarButton/NavBarButton';
 import ScreensLabel from '../../utils/labels/screensLabel';
 import PlayButton from '../../components/PlayButton/PlayButton';
 import QuizList from '../../components/QuizList/QuizList';
-import QuizItem from '../../assets/mocks/Quiz';
 import GameCat from '../../utils/logo/gamecategories';
 import ChoiceDifficultyModal from '../../components/ChoiceDifficultyModal/ChoiceDifficultyModal';
 import QuizListButton from '../../components/QuizListButton/QuizListButton';
+import { getQuizByDifficulty } from '../../utils/game/gameutils';
+import QuizListLabel from '../../utils/labels/quizList';
 
 class Home extends Component {
   static navigationOptions = {
@@ -21,7 +22,7 @@ class Home extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      openQList: false
+      openQList: false,
     };
   }
   setModalVisible() {
@@ -35,9 +36,11 @@ class Home extends Component {
     });
   }
   handleChoice(difficulty) {
-    console.log(difficulty);
-    this.props.navigation.navigate(ScreensLabel.labels.GAME);
-    this.setModalVisible();
+    const UID = this.props.navigation.getParam('uid', null);    
+    getQuizByDifficulty(UID, difficulty).then((q) => {
+      this.setModalVisible();
+      this.props.navigation.navigate(ScreensLabel.labels.GAME, { quiz: q, uid: UID });
+    });
   }
   render() {
     return (
@@ -87,11 +90,11 @@ class Home extends Component {
           </View>
           {
             this.state.openQList &&
-            <ScrollView>
+            <ScrollView style={{ width: '100%' }}>
               <View>
-                <QuizList data={QuizItem} title="New games" logo={GameCat.NEW} />
-                <QuizList data={QuizItem} title="Most played games" logo={GameCat.POPULAR} />
-                <QuizList data={QuizItem} title="Recommended games" logo={GameCat.RECOMMENDED} />
+                <QuizList title={QuizListLabel.NEW} logo={GameCat.NEW} />
+                <QuizList title={QuizListLabel.MP} logo={GameCat.POPULAR} />
+                <QuizList title={QuizListLabel.REC} logo={GameCat.RECOMMENDED} />
               </View>
             </ScrollView>
           }

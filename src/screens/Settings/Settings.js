@@ -48,7 +48,9 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Colors.blueThemeColor,
-  }
+    height: 56,
+    paddingBottom: 15
+  },
 });
 
 export default withNavigation(Sttings);

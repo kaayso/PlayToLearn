@@ -4,25 +4,25 @@ import { StyleSheet, Text, TouchableHighlight, View, Image } from 'react-native'
 import Fonts from '../../utils/fonts/Fonts';
 
 const Square = props => (
-          <TouchableHighlight
-            onPress={() => props.navigation.navigate(props.label, { name: 'J.Smith' })}
-            activeOpacity={0.1}
-            underlayColor='transparent'
-            style={[styles.square, props.style]}
-          >
-            <View style={styles.labelContainer}>
-              <Image
-                style={{ width: 90, height: 90 }}
-                source={props.img}
-              />
-              <Text
-                style={styles.labelText}
-              >
-                { props.label }
-              </Text>
-            </View>
-          </TouchableHighlight>
-      );
+  <TouchableHighlight
+    onPress={() => props.navigation.navigate(props.label, { uid: props.uid })}
+    activeOpacity={0.1}
+    underlayColor='transparent'
+    style={[styles.square, props.style]}
+  >
+    <View style={styles.labelContainer}>
+      <Image
+        style={{ width: 90, height: 90 }}
+        source={props.img}
+      />
+      <Text
+        style={styles.labelText}
+      >
+        {props.label}
+      </Text>
+    </View>
+  </TouchableHighlight>
+);
 
 const styles = StyleSheet.create({
   square: {
@@ -37,10 +37,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   labelText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#fff',
     fontWeight: 'normal',
-    fontFamily: Fonts.OPENSANSSEMIBOLD,
+    fontFamily: Fonts.OPENSANSBOLD,
     paddingTop: 5
   }
 });

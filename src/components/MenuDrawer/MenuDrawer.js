@@ -15,8 +15,23 @@ import ScreenLabel from '../../utils/labels/screensLabel';
 import Fonts from '../../utils/fonts/Fonts';
 import avatarsManager from '../../utils/avatars/avatarsManager';
 import Bg from '../../utils/background/backgroundimages';
+import { getUserById } from '../../utils/game/gameutils';
 
 class MenuDrawer extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: null
+        };
+    }
+    componentDidMount() {
+        const UID = this.props.navigation.getParam('uid', '');
+        getUserById(UID).then((u) => {
+            this.setState({
+                user: u
+            });
+        });
+    }
     navLink(text, nav, iconName) {
         return (
             <TouchableHighlight
@@ -50,12 +65,17 @@ class MenuDrawer extends Component {
                             <View style={styles.imgView}>
                                 <Image
                                     style={styles.img}
-                                    source={avatarsManager.getAvatar('User05b')}
+                                    source={avatarsManager.getAvatar(
+                                        this.state.user && this.state.user.picture
+                                    )}
                                 />
                             </View>
-                            {<Text style={styles.username}>
-                                {this.props.navigation.getParam('name', 'J.Smith')}
-                            </Text>}
+                            <Text style={styles.username}>
+                                {this.state.user && this.state.user.username}
+                            </Text>
+                            <Text style={styles.atUsername}>
+                                {this.state.user && `@${this.state.user.username}`}
+                            </Text>
                         </View>
                     </View>
                 </ImageBackground>
@@ -72,7 +92,9 @@ class MenuDrawer extends Component {
                         <TouchableHighlight
                             underlayColor={Colors.redThemeColor}
                             style={{ height: 45 }}
-                            onPress={() => console.log('disconnected')}
+                            onPress={() =>
+                                this.props.navigation.navigate(ScreenLabel.labels.AUTNAVIGATOR)
+                            }
                         >
                             <View style={styles.link}>
                                 <View style={styles.iconContainer}>
@@ -106,13 +128,11 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
+        marginTop: 20,
     },
     imgView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        paddingTop: 50,
-        paddingBottom: 10
+        padding: 10,
+        paddingBottom: 5
     },
     iconContainer: {
         width: 25
@@ -150,14 +170,14 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     username: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
         color: '#fff',
         fontSize: 16,
-        padding: 10,
-        paddingTop: 25,
-        fontFamily: Fonts.InknutAntiquaSemiBold
+        fontFamily: Fonts.OPENSANSSEMIBOLD
+    },
+    atUsername: {
+        color: Colors.blueBoldThemeColors,
+        fontSize: 11,
+        fontFamily: Fonts.OPENSANSREGULAR
     },
     footer: {
         height: 50,
