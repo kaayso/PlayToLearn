@@ -8,11 +8,12 @@ import NavBarButton from '../../components/NavBarButton/NavBarButton';
 import ScreensLabel from '../../utils/labels/screensLabel';
 
 class Challenge extends Component {
-  static navigationOptions ={
+  static navigationOptions = {
     header: null
   };
 
   render() {
+    console.log(this.props.navigation.getParam('uid', { picture: 'User02a' }));
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -26,8 +27,8 @@ class Challenge extends Component {
           }
           rightComponent={
             <NavBarButton
-            iconName='notifications'
-            navigationTo={ScreensLabel.labels.NOTIFICATIONS}
+              iconName='notifications'
+              navigationTo={ScreensLabel.labels.NOTIFICATIONS}
             />
           }
         />
@@ -35,7 +36,7 @@ class Challenge extends Component {
           <Text> Challenge screen </Text>
         </View>
       </View>
-      
+
     );
   }
 }
@@ -48,7 +49,9 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Colors.blueThemeColor,
-  }
+    height: 56,
+    paddingBottom: 15
+  },
 });
 
 export default withNavigation(Challenge);

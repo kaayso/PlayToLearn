@@ -1,5 +1,5 @@
 import React from 'react';
-import { 
+import {
     View,
     StyleSheet,
 } from 'react-native';
@@ -16,7 +16,7 @@ const IconButton = (props) => (
             }
         />
     </View>
-    );
+);
 export default withNavigation(IconButton);
 
 const styles = StyleSheet.create({

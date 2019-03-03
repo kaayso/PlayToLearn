@@ -16,7 +16,7 @@ items = [
     style: { backgroundColor: '#03A86F' },
     image: require('../../assets/images/challenge.png'),
   },
-  { label: DashboardLabels.labels.TOPSCORE,
+  { label: DashboardLabels.labels.RANKING,
     style: { backgroundColor: '#3D91F2' },
     image: require('../../assets/images/topscore.png'),
   },

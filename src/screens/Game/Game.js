@@ -6,8 +6,10 @@ import {
     ImageBackground,
     ScrollView,
     Image,
-    TouchableHighlight
+    TouchableHighlight,
+    BackHandler
 } from 'react-native';
+import { Spinner } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import { Header } from 'react-native-elements';
 import CloseButton from '../../components/CloseButton/CloseButton';
@@ -16,11 +18,16 @@ import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import Bg from '../../utils/background/backgroundimages';
 import Fonts from '../../utils/fonts/Fonts';
 import QuizResponse from '../../components/QuizResponse/QuizResponse';
-import QuizQR from '../../assets/mocks/QuizQR';
-import { initAnswersList, computeResult } from '../../utils/game/gameutils';
+import {
+    initAnswersList,
+    computeResult,
+    getUserById,
+    pushUserScore
+} from '../../utils/game/gameutils';
 import CheckResults from '../../components/CheckResults/CheckResults';
 import ConfirmationMsg from '../../components/ConfirmationMsg/ConfirmationMsg';
 import ScreensLabel from '../../utils/labels/screensLabel';
+import QuizNotFound from '../../components/QuizNotFound/QuizNotFound';
 
 const GAME_TIME = 150; // 150 seconds 
 
@@ -31,22 +38,32 @@ class Game extends Component {
             remainingTime: GAME_TIME,
             currentQuestion: 0,
             resposesChoosed: initAnswersList(),
-            answers: initAnswersList(),
             showResults: false,
             timeOut: false,
             modeCheckAnswers: false,
             quizResult: 0,
-            showConfirmationMsg: false
+            showConfirmationMsg: false,
+            quizPicked: null,
+            user: null,
+            isLoading: true
         };
     }
     componentDidMount() {
         this.intervalId = setInterval(this.timer.bind(this), 1000);
-        this.setState({
-            answers: QuizQR.Answers
+        const UID = this.props.navigation.getParam('uid', null);
+        getUserById(UID).then((u) => {
+            this.setState({
+                quizPicked: this.props.navigation.getParam('quiz', null),
+                user: u,
+                isLoading: false
+            });
         });
+        // Disable hardware back button
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
     }
     componentWillUnmount() {
         clearInterval(this.intervalId);
+        this.backHandler.remove();
     }
     timer() {
         this.setState({
@@ -66,7 +83,7 @@ class Game extends Component {
         if (!responsesToCurrentQ.includes(number)) {
             responsesToCurrentQ.push(number);
             this.state.resposesChoosed[this.state.currentQuestion] = responsesToCurrentQ;
-            // Force reload the render of the component
+            // Force reload the render method of the component
             this.setState({
                 resposesChoosed: this.state.resposesChoosed
             });
@@ -87,13 +104,17 @@ class Game extends Component {
         } else {
             // move to results vue        
             // clear interval timer
+            // send score
+            const score = computeResult(this.state.quizPicked.answers, this.state.resposesChoosed);
             clearInterval(this.intervalId);
             this.setState({
                 showResults: true,
                 quizResult: !this.state.modeCheckAnswers ?
-                    computeResult(this.state.answers, this.state.resposesChoosed) :
+                    score :
                     this.state.quizResult
             });
+            // eslint-disable-next-line no-underscore-dangle
+            pushUserScore(this.state.user._id, this.state.quizPicked._id, score);
         }
         return;
     }
@@ -143,7 +164,10 @@ class Game extends Component {
                             <CloseButton handleCloseAction={() => this.handleCloseAction()} />
                         }
                         rightComponent={
-                            <Image style={{ width: 40, height: 40 }} source={QuizQR.image} />
+                            <Image
+                                style={{ width: 40, height: 40 }}
+                                source={{ uri: `http://10.0.2.2:8000/logo/${this.state.quizPicked && this.state.quizPicked.image}` }}
+                            />
                         }
                     />
                     <CheckResults
@@ -158,115 +182,150 @@ class Game extends Component {
                         onClose={() => this.closeConfirmationMsg()}
                         onConfirm={() => this.confirmToGoHome()}
                     />
-                    <View style={styles.container}>
-                        <ScrollView>
-                            <View
-                                style={[
-                                    styles.progressCircle,
-                                    { marginTop: this.state.modeCheckAnswers ? 65 : 0 }
-                                ]}
-                            >
-                                {
-                                    !this.state.modeCheckAnswers &&
-                                    <Timer
-                                        remainingTime={this.state.remainingTime}
-                                        time={GAME_TIME}
-                                    />
-                                }
-                            </View>
-                            <View style={styles.question}>
-                                <Text style={styles.questionText}>
-                                    {QuizQR.QuestionsResponses[this.state.currentQuestion].Question}
-                                </Text>
-                            </View>
-                            <ProgressBar value={this.state.currentQuestion + 1} />
-                            <View style={styles.responsesContainer}>
-                                <View style={styles.responsesLeft}>
-                                    <QuizResponse
-                                        text={
-                                            QuizQR.QuestionsResponses[this.state.currentQuestion]
-                                                .response1
+                    <View
+                        style={[
+                            styles.container,
+                            { justifyContent: `${this.state.quizPicked ? 'flex-start' : 'center'}` }
+                        ]}
+                    >
+                        {
+                            // eslint-disable-next-line no-nested-ternary
+                            (this.state.quizPicked && !this.state.isLoading) ?
+                                <ScrollView>
+                                    <View
+                                        style={[
+                                            styles.progressCircle,
+                                            { marginTop: this.state.modeCheckAnswers ? 65 : 0 }
+                                        ]}
+                                    >
+                                        {
+                                            !this.state.modeCheckAnswers &&
+                                            <Timer
+                                                remainingTime={this.state.remainingTime}
+                                                time={GAME_TIME}
+                                            />
                                         }
-                                        choosed={() => this.handleResponse(0)}
-                                        pressed={
-                                            this.state.resposesChoosed[this.state.currentQuestion]
-                                                .includes(0)
-                                        }
-                                        modeCheckAnswers={this.state.modeCheckAnswers}
-                                        correct={
-                                            this.state.answers[this.state.currentQuestion]
-                                                .includes(0)
-                                        }
-                                    />
-                                    <QuizResponse
-                                        text={
-                                            QuizQR.QuestionsResponses[this.state.currentQuestion]
-                                                .response3
-                                        }
-                                        choosed={() => this.handleResponse(2)}
-                                        pressed={
-                                            this.state.resposesChoosed[this.state.currentQuestion]
-                                                .includes(2)
-                                        }
-                                        modeCheckAnswers={this.state.modeCheckAnswers}
-                                        correct={
-                                            this.state.answers[this.state.currentQuestion]
-                                                .includes(2)
-                                        }
-                                    />
-                                </View>
-                                <View style={styles.responsesRight}>
-                                    <QuizResponse
-                                        text={
-                                            QuizQR.QuestionsResponses[this.state.currentQuestion]
-                                                .response2
-                                        }
-                                        choosed={() => this.handleResponse(1)}
-                                        pressed={
-                                            this.state.resposesChoosed[this.state.currentQuestion]
-                                                .includes(1)
-                                        }
-                                        modeCheckAnswers={this.state.modeCheckAnswers}
-                                        correct={
-                                            this.state.answers[this.state.currentQuestion]
-                                                .includes(1)
-                                        }
-                                    />
-                                    <QuizResponse
-                                        text={
-                                            QuizQR.QuestionsResponses[this.state.currentQuestion]
-                                                .response4
-                                        }
-                                        choosed={() => this.handleResponse(3)}
-                                        pressed={
-                                            this.state.resposesChoosed[this.state.currentQuestion]
-                                                .includes(3)
-                                        }
-                                        modeCheckAnswers={this.state.modeCheckAnswers}
-                                        correct={
-                                            this.state.answers[this.state.currentQuestion]
-                                                .includes(3)
-                                        }
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.controlButtonsContainer}>
-                                <TouchableHighlight
-                                    onPress={() => this.previousQuestion()}
-                                    underlayColor='rgba(255, 255, 255, 0.4)'
-                                    style={styles.controlButtons}
-                                >
-                                    <Text style={styles.controlText}>Previous</Text>
-                                </TouchableHighlight>
-                                <TouchableHighlight
-                                    onPress={() => this.nextQuestion()}
-                                    underlayColor='rgba(255, 255, 255, 0.4)'
-                                    style={styles.controlButtons}
-                                >
-                                    <Text style={styles.controlText} >Next</Text>
-                                </TouchableHighlight>
-                            </View>
-                        </ScrollView>
+                                    </View>
+                                    <View style={styles.question}>
+                                        <Text style={styles.questionText}>
+                                            {
+                                                this.state.quizPicked
+                                                    .questionsResponse[this.state.currentQuestion]
+                                                    .question
+                                            }
+                                        </Text>
+                                    </View>
+                                    <ProgressBar value={this.state.currentQuestion + 1} />
+                                    <View style={styles.responsesContainer}>
+                                        <View style={styles.responsesLeft}>
+                                            <QuizResponse
+                                                text={
+                                                    this.state.quizPicked
+                                                    .questionsResponse[this.state.currentQuestion]
+                                                        .response1
+                                                }
+                                                choosed={() => this.handleResponse(0)}
+                                                pressed={
+                                                    this.state
+                                                        .resposesChoosed[this.state.currentQuestion]
+                                                        .includes(0)
+                                                }
+                                                modeCheckAnswers={this.state.modeCheckAnswers}
+                                                correct={
+                                                    this
+                                                        .state.quizPicked
+                                                        .answers[this.state.currentQuestion]
+                                                        .includes(0)
+                                                }
+                                            />
+                                            <QuizResponse
+                                                text={
+                                                    this.state.quizPicked
+                                                    .questionsResponse[this.state.currentQuestion]
+                                                        .response3
+                                                }
+                                                choosed={() => this.handleResponse(2)}
+                                                pressed={
+                                                    this.state
+                                                        .resposesChoosed[this.state.currentQuestion]
+                                                        .includes(2)
+                                                }
+                                                modeCheckAnswers={this.state.modeCheckAnswers}
+                                                correct={
+                                                    this.state.quizPicked
+                                                        .answers[this.state.currentQuestion]
+                                                        .includes(2)
+                                                }
+                                            />
+                                        </View>
+                                        <View style={styles.responsesRight}>
+                                            <QuizResponse
+                                                text={
+                                                    this.state.quizPicked
+                                                    .questionsResponse[this.state.currentQuestion]
+                                                        .response2
+                                                }
+                                                choosed={() => this.handleResponse(1)}
+                                                pressed={
+                                                    this.state
+                                                        .resposesChoosed[this.state.currentQuestion]
+                                                        .includes(1)
+                                                }
+                                                modeCheckAnswers={this.state.modeCheckAnswers}
+                                                correct={
+                                                    this.state.quizPicked
+                                                        .answers[this.state.currentQuestion]
+                                                        .includes(1)
+                                                }
+                                            />
+                                            <QuizResponse
+                                                text={
+                                                    this.state.quizPicked
+                                                    .questionsResponse[this.state.currentQuestion]
+                                                        .response4
+                                                }
+                                                choosed={() => this.handleResponse(3)}
+                                                pressed={
+                                                    this.state
+                                                        .resposesChoosed[this.state.currentQuestion]
+                                                        .includes(3)
+                                                }
+                                                modeCheckAnswers={this.state.modeCheckAnswers}
+                                                correct={
+                                                    this.state.quizPicked
+                                                        .answers[this.state.currentQuestion]
+                                                        .includes(3)
+                                                }
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={styles.controlButtonsContainer}>
+                                        <TouchableHighlight
+                                            onPress={() => this.previousQuestion()}
+                                            underlayColor='rgba(255, 0, 0, 1)'
+                                            style={styles.controlButtons}
+                                        >
+                                            <Text style={styles.controlText}>Previous</Text>
+                                        </TouchableHighlight>
+                                        <TouchableHighlight
+                                            onPress={() => this.nextQuestion()}
+                                            underlayColor='rgba(0, 255, 153, 1)'
+                                            style={styles.controlButtons}
+                                        >
+                                            <Text style={styles.controlText} >
+                                                {
+                                                    this.state.currentQuestion === 9 ?
+                                                        'Results' :
+                                                        'Next'
+                                                }
+                                            </Text>
+                                        </TouchableHighlight>
+                                    </View>
+                                </ScrollView> :
+                                this.state.isLoading ?
+                                    <Spinner color="red" /> :
+                                    <QuizNotFound />
+                        }
                     </View>
                 </View>
             </ImageBackground >
@@ -315,19 +374,20 @@ const styles = StyleSheet.create({
     controlButtonsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: 5
+        marginTop: 10
     },
     controlText: {
-        color: '#fff',
-        fontSize: 17
+        color: '#000',
+        fontSize: 16
     },
     controlButtons: {
         width: 100,
-        height: 50,
+        height: 40,
         padding: 5,
         borderRadius: 5,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.4)'
     }
 });
 

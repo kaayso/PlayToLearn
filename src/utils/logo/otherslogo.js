@@ -3,4 +3,5 @@
 export default {
     TROPHIE: require('../../assets/images/trophie.png'),
     TROPHIEDISABLE: require('../../assets/images/trophie-disable.png'),
+    PTL: require('../../assets/images/logo.png')
 };

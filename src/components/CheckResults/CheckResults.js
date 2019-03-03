@@ -9,22 +9,14 @@ import {
 import { withNavigation } from 'react-navigation';
 import { Overlay } from 'react-native-elements';
 import * as Progress from 'react-native-progress';
-
 import Layout from '../../constants/Layout';
 import Fonts from '../../utils/fonts/Fonts';
 import Colors from '../../constants/Colors';
 import Logo from '../../utils/logo/otherslogo';
 import Screens from '../../utils/labels/screensLabel';
+import { getProgressCircleColor } from '../../utils/game/gameutils';
 
 class CheckResults extends Component {
-    getProgressCircleColor() {
-        if (this.props.result < 5) {
-            return 'red';
-        } else if (this.props.result < 8) {
-            return 'orange';
-        }
-        return 'green';
-    }
     render() {
         return (
             <Overlay
@@ -39,12 +31,12 @@ class CheckResults extends Component {
                         <Progress.Circle
                             progress={this.props.result / 10}
                             size={200}
-                            color={this.getProgressCircleColor()}
+                            color={getProgressCircleColor(this.props.result)}
                         />
                         <Text
                             style={[
                                 styles.textProg,
-                                { color: `${this.getProgressCircleColor()}` }
+                                { color: `${getProgressCircleColor(this.props.result)}` }
                             ]}
                         >
                             {this.props.result * 10} %

@@ -6,11 +6,15 @@ export default {
     CHALLENGE: 'Challenge',
     FRIENDS: 'Friends',
     ACHIEVEMENTS: 'Achievements',
-    TOPSCORE: 'Top score',
+    RANKING: 'Ranking',
     DISCONNECT: 'Disconnect',
     START: 'Start',
     DASHBOARD: 'Dashboard',
     NOTIFICATIONS: 'Notifications',
-    GAME: 'GameScreen'
+    GAME: 'GameScreen',
+    LOGIN: 'Login',
+    REGISTRATION: 'Registration',
+    AUTNAVIGATOR: 'autNavigator',
+    APPNAVIGATOR: 'appNavigator'
   },
 };

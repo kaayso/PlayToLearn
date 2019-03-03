@@ -1,4 +1,10 @@
-import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
+import {
+  createStackNavigator,
+  createAppContainer,
+  createDrawerNavigator,
+  createSwitchNavigator
+}
+  from 'react-navigation';
 import React from 'react';
 
 import Home from '../screens/Home/Home';
@@ -8,6 +14,8 @@ import Settings from '../screens/Settings/Settings';
 import Friends from '../screens/Friends/Friends';
 import Challenge from '../screens/Challenge/Challenge';
 import Dashboard from '../screens/Dashboard/Dashboard';
+import Login from '../screens/Login/Login';
+import Registration from '../screens/Registration/Registration';
 import NotificationScreen from '../screens/Notifications/Notifications';
 import GameScreen from '../screens/Game/Game';
 
@@ -17,7 +25,7 @@ import MenuDrawer from '../components/MenuDrawer/MenuDrawer';
 import ScreensLabel from '../utils/labels/screensLabel';
 
 const optionsNavigation = {
-  initialRouteName: ScreensLabel.labels.START,
+  initialRouteName: ScreensLabel.labels.AUTNAVIGATOR,
   defaultNavigationOptions: {
     headerStyle: {
       backgroundColor: Colors.blueThemeColor,
@@ -27,40 +35,176 @@ const optionsNavigation = {
 };
 
 const drawerConfig = {
-    drawerWidth: Layout.window.width * 0.70,
-    contentComponent: ({ props }) => (<MenuDrawer {...props} />)
+  drawerWidth: Layout.window.width * 0.70,
+  contentComponent: ({ props }) => (<MenuDrawer {...props} />)
 };
 
-const menuNavigator = createDrawerNavigator({
-    Home: {
-      screen: Home,
-    },
-    Profile: {
-      screen: Profile,
-    },
-    Settings: {
-      screen: Settings,
-    },
-    Challenge: {
-      screen: Challenge,
-    },
-    Friends: {
-      screen: Friends,
-    },
-    Achievements: {
-      screen: Achievements,
-    },
+const homeNavigator = createDrawerNavigator({
+  Home: {
+    screen: Home,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  Settings: {
+    screen: Settings,
+  },
+  Challenge: {
+    screen: Challenge,
+  },
+  Friends: {
+    screen: Friends,
+  },
+  Achievements: {
+    screen: Achievements,
+  },
 }, drawerConfig);
 
-const navigator = createStackNavigator({
-  Start: {
-    screen: menuNavigator,
+const settingsNavigator = createDrawerNavigator({
+  Settings: {
+    screen: Settings,
+  },
+  Home: {
+    screen: Home,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  Challenge: {
+    screen: Challenge,
+  },
+  Friends: {
+    screen: Friends,
+  },
+  Achievements: {
+    screen: Achievements,
+  },
+}, drawerConfig);
+
+const profileNavigator = createDrawerNavigator({
+  Profile: {
+    screen: Profile,
+  },
+  Settings: {
+    screen: Settings,
+  },
+  Home: {
+    screen: Home,
+  },
+
+  Challenge: {
+    screen: Challenge,
+  },
+  Friends: {
+    screen: Friends,
+  },
+  Achievements: {
+    screen: Achievements,
+  },
+}, drawerConfig);
+
+const challengeNavigator = createDrawerNavigator({
+  Challenge: {
+    screen: Challenge,
+  },
+  Settings: {
+    screen: Settings,
+  },
+  Home: {
+    screen: Home,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  Friends: {
+    screen: Friends,
+  },
+  Achievements: {
+    screen: Achievements,
+  },
+}, drawerConfig);
+
+const friendsNavigator = createDrawerNavigator({
+  Friends: {
+    screen: Friends,
+  },
+  Settings: {
+    screen: Settings,
+  },
+  Home: {
+    screen: Home,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  Challenge: {
+    screen: Challenge,
+  },
+  Achievements: {
+    screen: Achievements,
+  },
+}, drawerConfig);
+
+const achievementsNavigator = createDrawerNavigator({
+  Achievements: {
+    screen: Achievements,
+  },
+  Settings: {
+    screen: Settings,
+  },
+  Home: {
+    screen: Home,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  Challenge: {
+    screen: Challenge,
+  },
+  Friends: {
+    screen: Friends,
+  },
+}, drawerConfig);
+
+const appNavigator = createStackNavigator({
+  Dashboard: {
+    screen: Dashboard,
     navigationOptions: {
       header: null
     }
   },
-  Dashboard: {
-    screen: Dashboard,
+  Start: {
+    screen: homeNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Challenge: {
+    screen: challengeNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Friends: {
+    screen: friendsNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Achievements: {
+    screen: achievementsNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Settings: {
+    screen: settingsNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Profile: {
+    screen: profileNavigator,
     navigationOptions: {
       header: null
     }
@@ -77,6 +221,37 @@ const navigator = createStackNavigator({
       header: null
     }
   }
+});
+
+const autNavigator = createStackNavigator({
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Registration: {
+    screen: Registration,
+    navigationOptions: {
+      header: null
+    }
+  },
+});
+
+const rootNavigator = createSwitchNavigator({
+  autNavigator: {
+    screen: autNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
+  appNavigator: {
+    screen: appNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
 }, optionsNavigation);
 
-export default createAppContainer(navigator);
+
+export default createAppContainer(rootNavigator);

@@ -8,7 +8,7 @@ import NavBarButton from '../../components/NavBarButton/NavBarButton';
 import ScreensLabel from '../../utils/labels/screensLabel';
 
 class Profile extends Component {
-  static navigationOptions ={
+  static navigationOptions = {
     header: null
   };
 
@@ -26,8 +26,8 @@ class Profile extends Component {
           }
           rightComponent={
             <NavBarButton
-            iconName='notifications'
-            navigationTo={ScreensLabel.labels.NOTIFICATIONS}
+              iconName='notifications'
+              navigationTo={ScreensLabel.labels.NOTIFICATIONS}
             />
           }
         />
@@ -35,7 +35,7 @@ class Profile extends Component {
           <Text> Profile screen </Text>
         </View>
       </View>
-      
+
     );
   }
 }
@@ -48,7 +48,9 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Colors.blueThemeColor,
-  }
+    height: 56,
+    paddingBottom: 15
+  },
 });
 
 export default withNavigation(Profile);

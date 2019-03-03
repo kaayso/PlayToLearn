@@ -20,6 +20,7 @@ class ChoiceDifficultyModal extends Component {
                 isVisible={this.props.modalVisible}
                 onBackdropPress={this.props.modalVisibility}
                 windowBackgroundColor="rgba(0, 0, 0, .8)"
+
             >
                 <View
                     style={styles.container}
@@ -34,26 +35,30 @@ class ChoiceDifficultyModal extends Component {
                             <Text style={styles.title}>Choose difficulty</Text>
                         </View>
                         <TouchableHighlight
-                            onPress={() => this.props.handleChoice(Difficulty.EASY)}
+                            onPress={() => this.props.handleChoice(Difficulty.EASY.toLowerCase())}
                             style={styles.textContainer}
+                            underlayColor='#F2F2F2'
                         >
                             <Text style={styles.difficultyText}>{Difficulty.EASY}</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            onPress={() => this.props.handleChoice(Difficulty.MEDIUM)}
+                            onPress={() => this.props.handleChoice(Difficulty.MEDIUM.toLowerCase())}
                             style={styles.textContainer}
+                            underlayColor='#F2F2F2'
                         >
                             <Text style={styles.difficultyText}>{Difficulty.MEDIUM}</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            onPress={() => this.props.handleChoice(Difficulty.HARD)}
+                            onPress={() => this.props.handleChoice(Difficulty.HARD.toLowerCase())}
                             style={styles.textContainer}
+                            underlayColor='#F2F2F2'
                         >
                             <Text style={styles.difficultyText}>{Difficulty.HARD}</Text>
                         </TouchableHighlight>
                         <TouchableHighlight
-                            onPress={() => this.props.handleChoice(Difficulty.EXPERT)}
+                            onPress={() => this.props.handleChoice(Difficulty.EXPERT.toLowerCase())}
                             style={styles.textContainer}
+                            underlayColor='#F2F2F2'
                         >
                             <Text style={styles.difficultyText}>{Difficulty.EXPERT}</Text>
                         </TouchableHighlight>
