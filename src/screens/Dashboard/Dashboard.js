@@ -5,6 +5,7 @@ import Square from '../../components/Square/Square';
 import DashboardItems from '../../utils/dashboard/Squares';
 import Layout from '../../constants/Layout';
 import Bg from '../../utils/background/backgroundimages';
+import Screen from '../../utils/labels/screensLabel';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -14,9 +15,19 @@ export default class Dashboard extends Component {
     };
   }
   componentDidMount() {
-    this.setState({
-      uid: this.props.navigation.getParam('uid', null)
-    });
+    const UID = this.props.navigation.getParam('uid', null);
+    // if no uid then return to authentication screen...
+    if (!UID || UID === '') {
+      this.props.navigation.navigate(Screen.labels.LOGIN, { authError: true });
+    } else {
+      this.setState({
+        uid: UID
+      });
+    }
+    //TEMP
+    /*this.setState({
+      uid: '5c7c1b701d8e3ab24b0ea7bb'//UID
+    });*/
   }
 
   render() {
@@ -32,6 +43,7 @@ export default class Dashboard extends Component {
           renderItem={({ item }) => (
             <Square
               label={item.label}
+              screen={item.label === 'Disconnect' ? 'Login' : item.label}
               img={item.image}
               style={item.style}
               uid={this.state.uid}

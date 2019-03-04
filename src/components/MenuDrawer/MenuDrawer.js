@@ -83,7 +83,11 @@ class MenuDrawer extends Component {
                     <View style={styles.bottomLinks}>
                         {this.navLink('Home', ScreenLabel.labels.HOME, 'md-home')}
                         {this.navLink('Profile', ScreenLabel.labels.PROFILE, 'md-finger-print')}
-                        {this.navLink('Settings', ScreenLabel.labels.SETTINGS, 'md-settings')}
+                        {this.navLink(
+                            'Account settings',
+                            ScreenLabel.labels.SETTINGS,
+                            'md-settings')
+                        }
                         {this.navLink('Challenge', ScreenLabel.labels.CHALLENGE, 'md-flame')}
                         {this.navLink('Friends', ScreenLabel.labels.FRIENDS, 'md-contacts')}
                         {this.navLink('Achievements', ScreenLabel.labels.ACHIEVEMENTS, 'md-ribbon')}
@@ -167,7 +171,9 @@ const styles = StyleSheet.create({
     img: {
         width: 100,
         height: 100,
-        borderRadius: 50
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: '#000'
     },
     username: {
         color: '#fff',

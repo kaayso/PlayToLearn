@@ -25,6 +25,18 @@ class Login extends Component {
             password: ''
         };
     }
+    componentDidMount() {
+        const authError = this.props.navigation.getParam('authError', false);
+        if (authError) {
+            Toast.show({
+                text: 'Authentication error !',
+                duration: 3000,
+                type: 'danger',
+                position: 'bottom',
+                textStyle: { textAlign: 'center', fontSize: 13, color: '#fff' }
+            });
+        }
+    }
     setPasswordVisibility() {
         this.setState({
             secureText: !this.state.secureText
