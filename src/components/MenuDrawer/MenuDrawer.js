@@ -16,12 +16,14 @@ import Fonts from '../../utils/fonts/Fonts';
 import avatarsManager from '../../utils/avatars/avatarsManager';
 import Bg from '../../utils/background/backgroundimages';
 import { getUserById } from '../../utils/game/gameutils';
+import ConfirmationMsg from '../../components/ConfirmationMsg/ConfirmationMsg';
 
 class MenuDrawer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: null
+            user: null,
+            showConfirmationMsg: false
         };
     }
     componentDidMount() {
@@ -53,6 +55,22 @@ class MenuDrawer extends Component {
             </TouchableHighlight>
         );
     }
+    closeConfirmationMsg() {
+        this.setState({
+            showConfirmationMsg: false
+        });
+    }
+    confirmToGoLoginScreen() {
+        this.setState({
+            showConfirmationMsg: false
+        });
+        this.props.navigation.navigate(ScreenLabel.labels.AUTNAVIGATOR);
+    }
+    handleVisibilityAction() {
+        this.setState({
+            showConfirmationMsg: true
+        });
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -60,6 +78,12 @@ class MenuDrawer extends Component {
                     style={{ width: '100%', height: 180 }}
                     source={Bg.PROFILEBG}
                 >
+                    <ConfirmationMsg
+                        showMessage={this.state.showConfirmationMsg}
+                        message="Are you sure you want to disconnect ?"
+                        onClose={() => this.closeConfirmationMsg()}
+                        onConfirm={() => this.confirmToGoLoginScreen()}
+                    />
                     <View style={styles.topLinks}>
                         <View style={styles.profile}>
                             <View style={styles.imgView}>
@@ -83,7 +107,11 @@ class MenuDrawer extends Component {
                     <View style={styles.bottomLinks}>
                         {this.navLink('Home', ScreenLabel.labels.HOME, 'md-home')}
                         {this.navLink('Profile', ScreenLabel.labels.PROFILE, 'md-finger-print')}
-                        {this.navLink('Settings', ScreenLabel.labels.SETTINGS, 'md-settings')}
+                        {this.navLink(
+                            'Account settings',
+                            ScreenLabel.labels.SETTINGS,
+                            'md-settings')
+                        }
                         {this.navLink('Challenge', ScreenLabel.labels.CHALLENGE, 'md-flame')}
                         {this.navLink('Friends', ScreenLabel.labels.FRIENDS, 'md-contacts')}
                         {this.navLink('Achievements', ScreenLabel.labels.ACHIEVEMENTS, 'md-ribbon')}
@@ -93,7 +121,7 @@ class MenuDrawer extends Component {
                             underlayColor={Colors.redThemeColor}
                             style={{ height: 45 }}
                             onPress={() =>
-                                this.props.navigation.navigate(ScreenLabel.labels.AUTNAVIGATOR)
+                                this.handleVisibilityAction()
                             }
                         >
                             <View style={styles.link}>
@@ -167,7 +195,9 @@ const styles = StyleSheet.create({
     img: {
         width: 100,
         height: 100,
-        borderRadius: 50
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: '#000'
     },
     username: {
         color: '#fff',

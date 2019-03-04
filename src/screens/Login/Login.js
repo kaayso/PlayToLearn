@@ -25,6 +25,18 @@ class Login extends Component {
             password: ''
         };
     }
+    componentDidMount() {
+        const authError = this.props.navigation.getParam('authError', false);
+        if (authError) {
+            Toast.show({
+                text: 'Authentication error !',
+                duration: 3000,
+                type: 'danger',
+                position: 'bottom',
+                textStyle: { textAlign: 'center', fontSize: 13, color: '#fff' }
+            });
+        }
+    }
     setPasswordVisibility() {
         this.setState({
             secureText: !this.state.secureText
@@ -46,7 +58,7 @@ class Login extends Component {
         } else {
             // Test matching between username and password
             UserAuthentication(username, pwd).then((u) => {
-                if (!u) {
+                if (u.message === 'authentication failed') {
                     // Matching not found
                     Toast.show({
                         text: 'Your username and password don\'t match',

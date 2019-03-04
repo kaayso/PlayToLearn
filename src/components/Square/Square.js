@@ -5,7 +5,9 @@ import Fonts from '../../utils/fonts/Fonts';
 
 const Square = props => (
   <TouchableHighlight
-    onPress={() => props.navigation.navigate(props.label, { uid: props.uid })}
+    onPress={() =>
+      props.pressed(props.screen)
+    }
     activeOpacity={0.1}
     underlayColor='transparent'
     style={[styles.square, props.style]}

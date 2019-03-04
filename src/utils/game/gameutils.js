@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 /**
- * format a value in second into mm:ss format
+ * format from second into mm:ss format
  * @param {number} seconds 
  */
 function getTimeInMinutes(seconds) {
