@@ -26,7 +26,6 @@ import {
 } from '../../utils/game/gameutils';
 import CheckResults from '../../components/CheckResults/CheckResults';
 import ConfirmationMsg from '../../components/ConfirmationMsg/ConfirmationMsg';
-import ScreensLabel from '../../utils/labels/screensLabel';
 import QuizNotFound from '../../components/QuizNotFound/QuizNotFound';
 
 const GAME_TIME = 150; // 150 seconds 
@@ -113,8 +112,14 @@ class Game extends Component {
                     score :
                     this.state.quizResult
             });
-            // eslint-disable-next-line no-underscore-dangle
-            pushUserScore(this.state.user._id, this.state.quizPicked._id, score);
+            pushUserScore(
+                // eslint-disable-next-line no-underscore-dangle
+                this.state.user._id,
+                // eslint-disable-next-line no-underscore-dangle
+                this.state.quizPicked._id,
+                score,
+                this.state.quizPicked.theme
+            );
         }
         return;
     }
@@ -147,7 +152,7 @@ class Game extends Component {
         this.setState({
             showConfirmationMsg: false
         });
-        this.props.navigation.navigate(ScreensLabel.labels.START);
+        this.props.navigation.goBack();
     }
     // Questions 200 caracteres 
     // Reponse 90 caracteres
@@ -178,7 +183,7 @@ class Game extends Component {
                     />
                     <ConfirmationMsg
                         showMessage={this.state.showConfirmationMsg}
-                        message="Are you sure you want to back to home screen ?"
+                        message="Are you sure you want to abort this game ?"
                         onClose={() => this.closeConfirmationMsg()}
                         onConfirm={() => this.confirmToGoHome()}
                     />

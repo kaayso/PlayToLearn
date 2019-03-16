@@ -14,7 +14,7 @@ import Logo from '../../utils/logo/otherslogo';
 import Fonts from '../../utils/fonts/Fonts';
 import Input from '../../components/TextInput/Input';
 import Screens from '../../utils/labels/screensLabel';
-import { UserAuthentication } from '../../utils/game/gameutils';
+import { userAuthentication } from '../../utils/game/gameutils';
 
 class Login extends Component {
     constructor(props) {
@@ -57,7 +57,7 @@ class Login extends Component {
             });
         } else {
             // Test matching between username and password
-            UserAuthentication(username, pwd).then((u) => {
+            userAuthentication(username, pwd).then((u) => {
                 if (u.message === 'authentication failed') {
                     // Matching not found
                     Toast.show({

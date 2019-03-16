@@ -27,9 +27,9 @@ export default class Dashboard extends Component {
       });
     }
     //TEMP
-    /*this.setState({
+   /*  this.setState({
       uid: '5c7c1b701d8e3ab24b0ea7bb'//UID
-    });*/
+    }); */
   }
   handleVisibilityAction() {
     this.setState({

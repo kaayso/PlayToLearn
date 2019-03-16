@@ -1,11 +1,32 @@
+/* eslint-disable no-param-reassign */
 const moment = require('moment');
-
+/**
+ * add key field in each element of list
+ * @param {Array} list 
+ */
+function addKeysToList(list) {
+    for (let i = 0; i < list.length; i++) {
+        // eslint-disable-next-line no-underscore-dangle
+        list[i].key = JSON.stringify(i);
+    }
+    return list;
+}
 /**
  * format from second into mm:ss format
  * @param {number} seconds 
  */
 function getTimeInMinutes(seconds) {
     return moment.utc(seconds * 1000).format('mm:ss');
+}
+
+/**
+ * Get challenge list for finished games
+ * @param {Array} list 
+ */
+function filterHistoryChallengeList(list) {
+    return list.filter(elmt =>
+        elmt.result === 'Won' || elmt.result === 'Lost' || elmt.result === 'Draw'
+    );
 }
 
 /**
@@ -58,7 +79,7 @@ function computeResult(correctAnswers, userAnswers) {
  */
 
 /**
- * get quiz object by using its id
+ * get quiz object by using his id
  * @param {String} quizId 
  * @return promise
  */
@@ -91,12 +112,44 @@ const getAllQuiz = async () => {
 };
 
 /**
+ * get list of daily challenge
+ * @return promise
+ */
+const getDailyChallenge = async () => {
+    const url = 'http://10.0.2.2:8000/challenges/daily';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
+ * get list of weekly challenge
+ * @return promise
+ */
+const getWeeklyChallenge = async () => {
+    const url = 'http://10.0.2.2:8000/challenges/weekly';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
  * get a quizz according to the difficulty
  * @param {String} uid 
  * @param {String} diff
  */
 const getQuizByDifficulty = async (uid, diff) => {
-    const url = `http://10.0.2.2:8000/quizs/random/${uid}?level=${diff}`;    
+    const url = `http://10.0.2.2:8000/quizs/random/${uid}?level=${diff}`;
     // eslint-disable-next-line no-undef
     const response = await fetch(url);
     try {
@@ -166,8 +219,22 @@ const getRecommendedQuiz = async (uid, quantity) => {
  * @param {String} uid 
  * @param {String} qid 
  * @param {String} sc 
+ * @param {String} theme
  */
-const pushUserScore = async (uid, qid, sc) => {
+const pushUserScore = async (uid, qid, sc, theme) => {
+    if (sc === 10) {
+        pushUserAchievement(uid, theme, sc);
+    }
+    pushUserScoreQuiz(uid, qid, sc);
+};
+
+/**
+ * push user score quiz
+ * @param {String} uid 
+ * @param {String} qid 
+ * @param {String} sc 
+ */
+const pushUserScoreQuiz = async (uid, qid, sc) => {
     const url = `http://10.0.2.2:8000/scores/score_quiz/${uid}`;
     // eslint-disable-next-line no-undef
     const response = await fetch(
@@ -185,7 +252,38 @@ const pushUserScore = async (uid, qid, sc) => {
             }),
         });
     try {
-        const json = await response.json();      
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
+ * push user achievement
+ * @param {String} uid 
+ * @param {String} th 
+ * @param {Number} sc 
+ */
+const pushUserAchievement = async (uid, th, sc) => {
+    const url = 'http://10.0.2.2:8000/achievement';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: uid,
+                theme: th,
+                score: sc
+            }),
+        });
+    try {
+        const json = await response.json();
         return json;
     } catch (e) {
         console.log(`Fetch failed: ${e}`);
@@ -213,7 +311,7 @@ const getAllUsers = async () => {
 };
 
 /**
- * get user object by using its id
+ * get user object by using his id
  * @param {String} uid 
  */
 const getUserById = async (uid) => {
@@ -229,11 +327,43 @@ const getUserById = async (uid) => {
 };
 
 /**
+ * get user's challenge history by using his id
+ * @param {String} uid 
+ */
+const getChallengeHistory = async (uid) => {
+    const url = `http://10.0.2.2:8000/challenges/getHistoric/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
+ * get user's achievements by using his id
+ * @param {String} uid 
+ */
+const getAchievements = async (uid) => {
+    const url = `http://10.0.2.2:8000/achievements/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
  * get User object from username/password
  * @param {String} uname 
  * @param {String} pwd 
  */
-const UserAuthentication = async (uname, pwd) => {
+const userAuthentication = async (uname, pwd) => {
     const url = 'http://10.0.2.2:8000/users/authentication';
     // eslint-disable-next-line no-undef
     const response = await fetch(
@@ -293,6 +423,8 @@ const addNewUser = async (uname, pwd, pic) => {
 module.exports = {
     getTimeInMinutes,
     initAnswersList,
+    filterHistoryChallengeList,
+    addKeysToList,
     computeResult,
     getProgressCircleColor,
     getQuizById,
@@ -302,9 +434,13 @@ module.exports = {
     getQuizByDifficulty,
     getQuizMostPlayed,
     getNewQuiz,
-    UserAuthentication,
+    userAuthentication,
     addNewUser,
     getRecommendedQuiz,
-    pushUserScore
+    pushUserScore,
+    getWeeklyChallenge,
+    getDailyChallenge,
+    getChallengeHistory,
+    getAchievements
 };
 
