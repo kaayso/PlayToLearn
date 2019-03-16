@@ -5,7 +5,13 @@ import { Spinner } from 'native-base';
 import QuizItem from '../QuizItem/QuizItem';
 import Fonts from '../../utils/fonts/Fonts';
 import Colors from '../../constants/Colors';
-import { getQuizMostPlayed, getNewQuiz, getRecommendedQuiz } from '../../utils/game/gameutils';
+import {
+    getQuizMostPlayed,
+    getNewQuiz,
+    getRecommendedQuiz,
+    getDailyChallenge,
+    getWeeklyChallenge
+} from '../../utils/game/gameutils';
 import QuizListLabel from '../../utils/labels/quizList';
 
 class QuizList extends Component {
@@ -34,6 +40,20 @@ class QuizList extends Component {
                 break;
             case QuizListLabel.REC:
                 getRecommendedQuiz(UID, 5).then((d) => {
+                    this.setState({
+                        data: d
+                    });
+                });
+                break;
+            case QuizListLabel.WEEKLYC:
+                getWeeklyChallenge().then((d) => {
+                    this.setState({
+                        data: d
+                    });
+                });
+                break;
+            case QuizListLabel.DAILYC:
+                getDailyChallenge().then((d) => {
                     this.setState({
                         data: d
                     });

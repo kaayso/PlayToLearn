@@ -105,16 +105,41 @@ class MenuDrawer extends Component {
                 </ImageBackground>
                 <ScrollView>
                     <View style={styles.bottomLinks}>
-                        {this.navLink('Home', ScreenLabel.labels.HOME, 'md-home')}
-                        {this.navLink('Profile', ScreenLabel.labels.PROFILE, 'md-finger-print')}
+                        {this.navLink(
+                            'Home',
+                            ScreenLabel.labels.HOME,
+                            'md-home')
+                        }
+                        {this.navLink(
+                            'Profile',
+                            ScreenLabel.labels.PROFILE,
+                            'md-person')
+                        }
+                        {this.navLink(
+                            'Ranking',
+                            ScreenLabel.labels.RANKING,
+                            'md-podium')
+                        }
+                        {this.navLink(
+                            'Challenge',
+                            ScreenLabel.labels.CHALLENGE,
+                            'md-flame')
+                        }
+                        {this.navLink(
+                            'Friends',
+                            ScreenLabel.labels.FRIENDS,
+                            'md-contacts')
+                        }
+                        {this.navLink(
+                            'Achievements',
+                            ScreenLabel.labels.ACHIEVEMENTS,
+                            'md-ribbon')
+                        }
                         {this.navLink(
                             'Account settings',
                             ScreenLabel.labels.SETTINGS,
                             'md-settings')
                         }
-                        {this.navLink('Challenge', ScreenLabel.labels.CHALLENGE, 'md-flame')}
-                        {this.navLink('Friends', ScreenLabel.labels.FRIENDS, 'md-contacts')}
-                        {this.navLink('Achievements', ScreenLabel.labels.ACHIEVEMENTS, 'md-ribbon')}
                     </View>
                     <View>
                         <TouchableHighlight
@@ -190,7 +215,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 10,
         backgroundColor: '#fff',
-        paddingBottom: 200
+        paddingBottom: 60,
     },
     img: {
         width: 100,

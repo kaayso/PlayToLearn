@@ -17,6 +17,7 @@ import Dashboard from '../screens/Dashboard/Dashboard';
 import Login from '../screens/Login/Login';
 import Registration from '../screens/Registration/Registration';
 import NotificationScreen from '../screens/Notifications/Notifications';
+import Ranking from '../screens/Ranking/Ranking';
 import GameScreen from '../screens/Game/Game';
 
 import Colors from '../constants/Colors';
@@ -58,6 +59,9 @@ const homeNavigator = createDrawerNavigator({
   Achievements: {
     screen: Achievements,
   },
+  Ranking: {
+    screen: Ranking,
+  },
 }, drawerConfig);
 
 const settingsNavigator = createDrawerNavigator({
@@ -78,6 +82,9 @@ const settingsNavigator = createDrawerNavigator({
   },
   Achievements: {
     screen: Achievements,
+  },
+  Ranking: {
+    screen: Ranking,
   },
 }, drawerConfig);
 
@@ -101,6 +108,9 @@ const profileNavigator = createDrawerNavigator({
   Achievements: {
     screen: Achievements,
   },
+  Ranking: {
+    screen: Ranking,
+  },
 }, drawerConfig);
 
 const challengeNavigator = createDrawerNavigator({
@@ -121,6 +131,9 @@ const challengeNavigator = createDrawerNavigator({
   },
   Achievements: {
     screen: Achievements,
+  },
+  Ranking: {
+    screen: Ranking,
   },
 }, drawerConfig);
 
@@ -143,9 +156,39 @@ const friendsNavigator = createDrawerNavigator({
   Achievements: {
     screen: Achievements,
   },
+  Ranking: {
+    screen: Ranking,
+  },
 }, drawerConfig);
 
 const achievementsNavigator = createDrawerNavigator({
+  Achievements: {
+    screen: Achievements,
+  },
+  Settings: {
+    screen: Settings,
+  },
+  Home: {
+    screen: Home,
+  },
+  Profile: {
+    screen: Profile,
+  },
+  Challenge: {
+    screen: Challenge,
+  },
+  Friends: {
+    screen: Friends,
+  },
+  Ranking: {
+    screen: Ranking,
+  },
+}, drawerConfig);
+
+const rankingNavigator = createDrawerNavigator({
+  Ranking: {
+    screen: Ranking,
+  },
   Achievements: {
     screen: Achievements,
   },
@@ -205,6 +248,12 @@ const appNavigator = createStackNavigator({
   },
   Profile: {
     screen: profileNavigator,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Ranking: {
+    screen: rankingNavigator,
     navigationOptions: {
       header: null
     }

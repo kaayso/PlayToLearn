@@ -10,6 +10,7 @@ import { Spinner } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements';
 import { FlatGrid } from 'react-native-super-grid';
+import { lowerCase } from 'lodash';
 
 import Colors from '../../constants/Colors';
 import MenuButton from '../../components/MenuButton/MenuButton';
@@ -51,12 +52,12 @@ class Profile extends Component {
     });
     this.filterListItem(search);
   }
-  filterListItem(search) {
+  filterListItem(s) {
+    const search = lowerCase(s);
     this.setState({
       displayedStatsList: this.state.rawStats
       .filter((item) => item.theme.indexOf(search) > -1)
     });
-    this.forceUpdate();
   }
   render() {
     return (
@@ -167,8 +168,8 @@ const styles = StyleSheet.create({
   },
   identity: {
     position: 'absolute',
-    right: (Layout.window.width / 2) - 55,
-    top: 115
+    right: (Layout.window.width / 2) - 65,
+    top: 105
   },
   searchBar: {
     backgroundColor: '#fff',
@@ -176,9 +177,9 @@ const styles = StyleSheet.create({
     padding: 0
   },
   img: {
-    width: 110,
-    height: 110,
-    borderRadius: 60,
+    width: 130,
+    height: 130,
+    borderRadius: 70,
     borderWidth: 4,
     borderColor: '#fff'
   },

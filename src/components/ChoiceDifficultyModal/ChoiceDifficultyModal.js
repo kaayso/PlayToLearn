@@ -20,7 +20,6 @@ class ChoiceDifficultyModal extends Component {
                 isVisible={this.props.modalVisible}
                 onBackdropPress={this.props.modalVisibility}
                 windowBackgroundColor="rgba(0, 0, 0, .8)"
-
             >
                 <View
                     style={styles.container}

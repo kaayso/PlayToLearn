@@ -5,4 +5,5 @@ export default {
     PROFILEBG: require('../../assets/images/profilebg.png'),
     GAMEBG: require('../../assets/images/dashboardbg.jpg'),
     LOGINBG: require('../../assets/images/login-bg1.jpg'),
+    VSBG: require('../../assets/images/vs-background.png')
 };
