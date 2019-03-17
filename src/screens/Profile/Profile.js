@@ -5,12 +5,13 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  AsyncStorage
 } from 'react-native';
 import { Spinner } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements';
 import { FlatGrid } from 'react-native-super-grid';
-import { lowerCase } from 'lodash';
+import { lowerCase, upperFirst } from 'lodash';
 
 import Colors from '../../constants/Colors';
 import MenuButton from '../../components/MenuButton/MenuButton';
@@ -36,13 +37,14 @@ class Profile extends Component {
       search: ''
     };
   }
-  componentDidMount() {
-    const UID = this.props.navigation.getParam('uid', '');
-    getUserById(UID).then((u) => {
-      this.setState({
-        user: u,
-        displayedStatsList: u.scores.score_theme,
-        rawStats: u.scores.score_theme,
+  componentWillMount() {
+    AsyncStorage.getItem('uid').then((id) => {
+      getUserById(id).then((u) => {
+        this.setState({
+          user: u,
+          displayedStatsList: u.scores.score_theme,
+          rawStats: u.scores.score_theme,
+        });
       });
     });
   }
@@ -56,7 +58,7 @@ class Profile extends Component {
     const search = lowerCase(s);
     this.setState({
       displayedStatsList: this.state.rawStats
-      .filter((item) => item.theme.indexOf(search) > -1)
+        .filter((item) => item.theme.indexOf(search) > -1)
     });
   }
   render() {
@@ -96,7 +98,7 @@ class Profile extends Component {
                   />
                   <View>
                     <Text style={styles.username}>
-                      {this.state.user.username}
+                      {upperFirst(this.state.user.username)}
                     </Text>
                   </View>
                 </View>
@@ -168,8 +170,8 @@ const styles = StyleSheet.create({
   },
   identity: {
     position: 'absolute',
-    right: (Layout.window.width / 2) - 65,
-    top: 105
+    right: (Layout.window.width / 2) - 60,
+    top: 110
   },
   searchBar: {
     backgroundColor: '#fff',
@@ -177,9 +179,9 @@ const styles = StyleSheet.create({
     padding: 0
   },
   img: {
-    width: 130,
-    height: 130,
-    borderRadius: 70,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     borderWidth: 4,
     borderColor: '#fff'
   },
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   username: {
-    fontSize: 19,
+    fontSize: 18,
     fontFamily: Fonts.OPENSANSREGULAR,
     textAlign: 'center',
     color: '#999'

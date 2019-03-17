@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatGrid } from 'react-native-super-grid';
-import { StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground, AsyncStorage } from 'react-native';
 import Square from '../../components/Square/Square';
 import DashboardItems from '../../utils/dashboard/Squares';
 import Layout from '../../constants/Layout';
@@ -16,20 +16,17 @@ export default class Dashboard extends Component {
       showConfirmationMsg: false,
     };
   }
-  componentDidMount() {
-    const UID = this.props.navigation.getParam('uid', null);
-    // if no uid then return to authentication screen...
-    if (!UID || UID === '') {
-      this.props.navigation.navigate(Screen.labels.LOGIN, { authError: true });
-    } else {
-      this.setState({
-        uid: UID
-      });
-    }
-    //TEMP
-   /*  this.setState({
-      uid: '5c7c1b701d8e3ab24b0ea7bb'//UID
-    }); */
+  componentWillMount() {
+    AsyncStorage.getItem('uid').then((id) => {
+      // if no uid then return to authentication screen...
+      if (!id || id === '') {
+        this.props.navigation.navigate(Screen.labels.LOGIN, { authError: true });
+      } else {
+        this.setState({
+          uid: id
+        });
+      }
+    });
   }
   handleVisibilityAction() {
     this.setState({
@@ -45,6 +42,7 @@ export default class Dashboard extends Component {
     this.setState({
       showConfirmationMsg: false
     });
+    AsyncStorage.setItem('uid', '');
     this.props.navigation.navigate(Screen.labels.AUTNAVIGATOR);
   }
   navigationHandler(label) {

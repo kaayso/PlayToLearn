@@ -7,7 +7,8 @@ import {
     TouchableHighlight,
     ImageBackground,
     ScrollView,
-    Image
+    Image,
+    AsyncStorage
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import Colors from '../../constants/Colors';
@@ -26,11 +27,12 @@ class MenuDrawer extends Component {
             showConfirmationMsg: false
         };
     }
-    componentDidMount() {
-        const UID = this.props.navigation.getParam('uid', '');
-        getUserById(UID).then((u) => {
-            this.setState({
-                user: u
+    componentWillMount() {
+        AsyncStorage.getItem('uid').then((id) => {
+            getUserById(id).then((u) => {
+                this.setState({
+                    user: u
+                });
             });
         });
     }
@@ -64,6 +66,7 @@ class MenuDrawer extends Component {
         this.setState({
             showConfirmationMsg: false
         });
+        AsyncStorage.setItem('uid', '');
         this.props.navigation.navigate(ScreenLabel.labels.AUTNAVIGATOR);
     }
     handleVisibilityAction() {
@@ -107,7 +110,7 @@ class MenuDrawer extends Component {
                     <View style={styles.bottomLinks}>
                         {this.navLink(
                             'Home',
-                            ScreenLabel.labels.HOME,
+                            ScreenLabel.labels.START,
                             'md-home')
                         }
                         {this.navLink(
@@ -140,8 +143,6 @@ class MenuDrawer extends Component {
                             ScreenLabel.labels.SETTINGS,
                             'md-settings')
                         }
-                    </View>
-                    <View>
                         <TouchableHighlight
                             underlayColor={Colors.redThemeColor}
                             style={{ height: 45 }}

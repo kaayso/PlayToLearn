@@ -36,7 +36,7 @@ export default StatsItem;
 const styles = StyleSheet.create({
     container: {
         width: 125,
-        height: 130,
+        height: 120,
         backgroundColor: '#003366',
         borderRadius: 5
     },
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         position: 'absolute',
-        top: 15,
+        top: 10,
         left: 22
     },
     trophy: {

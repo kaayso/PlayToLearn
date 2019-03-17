@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableHighlight,
+  AsyncStorage
+} from 'react-native';
 import { withNavigation } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Header } from 'react-native-elements';
@@ -31,15 +38,16 @@ class Challenge extends Component {
       challengeHistory: []
     };
   }
-  componentDidMount() {
-    const UID = this.props.navigation.getParam('uid', '');
-    getChallengeHistory(UID).then((history) => {
-      // test if no empty
-      if (!history.message) {
-        this.setState({
-          challengeHistory: filterHistoryChallengeList(history),
-        });
-      }
+  componentWillMount() {
+    AsyncStorage.getItem('uid').then((id) => {
+      getChallengeHistory(id).then((history) => {
+        // test if no empty
+        if (!history.message) {
+          this.setState({
+            challengeHistory: filterHistoryChallengeList(history),
+          });
+        }
+      });
     });
   }
   setModalVisible() {

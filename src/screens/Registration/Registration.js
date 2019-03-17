@@ -6,6 +6,7 @@ import {
     TouchableHighlight,
     Image,
     ImageBackground,
+    AsyncStorage
 } from 'react-native';
 import { Toast } from 'native-base';
 import { withNavigation } from 'react-navigation';
@@ -89,7 +90,8 @@ class Registration extends Component {
                         textStyle: { textAlign: 'center', fontSize: 14, color: '#fff' }
                     });
                     // eslint-disable-next-line no-underscore-dangle
-                    this.props.navigation.navigate(Screens.labels.DASHBOARD, { uid: res.user._id });
+                    AsyncStorage.setItem('uid', res.user._id);
+                    this.props.navigation.navigate(Screens.labels.DASHBOARD);
                 } else {
                     // Some errors
                     Toast.show({
