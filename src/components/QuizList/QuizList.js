@@ -1,7 +1,8 @@
-import { FlatList, View, StyleSheet, Text, Image } from 'react-native';
+import { FlatList, View, StyleSheet, Text, Image, AsyncStorage } from 'react-native';
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import { Spinner } from 'native-base';
+
 import QuizItem from '../QuizItem/QuizItem';
 import Fonts from '../../utils/fonts/Fonts';
 import Colors from '../../constants/Colors';
@@ -21,47 +22,48 @@ class QuizList extends Component {
             data: null
         };
     }
-    componentDidMount() {
-        const UID = this.props.navigation.getParam('uid', null);
-        switch (this.props.title) {
-            case QuizListLabel.MP:
-                getQuizMostPlayed(UID, 5).then((d) => {
-                    this.setState({
-                        data: d
+    componentWillMount() {
+        AsyncStorage.getItem('uid').then((id) => {
+            switch (this.props.title) {
+                case QuizListLabel.MP:
+                    getQuizMostPlayed(id, 5).then((d) => {
+                        this.setState({
+                            data: d
+                        });
                     });
-                });
-                break;
-            case QuizListLabel.NEW:
-                getNewQuiz(UID, 5).then((d) => {
-                    this.setState({
-                        data: d
+                    break;
+                case QuizListLabel.NEW:
+                    getNewQuiz(id, 5).then((d) => {
+                        this.setState({
+                            data: d
+                        });
                     });
-                });
-                break;
-            case QuizListLabel.REC:
-                getRecommendedQuiz(UID, 5).then((d) => {
-                    this.setState({
-                        data: d
+                    break;
+                case QuizListLabel.REC:
+                    getRecommendedQuiz(id, 5).then((d) => {
+                        this.setState({
+                            data: d
+                        });
                     });
-                });
-                break;
-            case QuizListLabel.WEEKLYC:
-                getWeeklyChallenge().then((d) => {
-                    this.setState({
-                        data: d
+                    break;
+                case QuizListLabel.WEEKLYC:
+                    getWeeklyChallenge().then((d) => {
+                        this.setState({
+                            data: d
+                        });
                     });
-                });
-                break;
-            case QuizListLabel.DAILYC:
-                getDailyChallenge().then((d) => {
-                    this.setState({
-                        data: d
+                    break;
+                case QuizListLabel.DAILYC:
+                    getDailyChallenge().then((d) => {
+                        this.setState({
+                            data: d
+                        });
                     });
-                });
-                break;
-            default:
-                break;
-        }
+                    break;
+                default:
+                    break;
+            }
+        });
     }
     render() {
         return (

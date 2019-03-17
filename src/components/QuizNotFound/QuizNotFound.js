@@ -11,9 +11,9 @@ const QuizNotFound = () => (
         <Image
             // eslint-disable-next-line global-require
             source={require('../../assets/images/not-found.png')}
-            style={{ width: 120, height: 120 }}
+            style={{ width: 100, height: 100 }}
         />
-        <Text style={styles.errMessage}>There is no quiz with this difficulty level...</Text>
+        <Text style={styles.errMessage}>Quiz not found...</Text>
     </View>
 );
 export default QuizNotFound;

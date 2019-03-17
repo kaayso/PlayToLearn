@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, AsyncStorage } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { Header } from 'react-native-elements';
+
 import Colors from '../../constants/Colors';
 import MenuButton from '../../components/MenuButton/MenuButton';
 import NavBarButton from '../../components/NavBarButton/NavBarButton';
@@ -36,10 +37,11 @@ class Home extends Component {
     });
   }
   handleChoice(difficulty) {
-    const UID = this.props.navigation.getParam('uid', null);    
-    getQuizByDifficulty(UID, difficulty).then((q) => {
-      this.setModalVisible();
-      this.props.navigation.navigate(ScreensLabel.labels.GAME, { quiz: q, uid: UID });
+    AsyncStorage.getItem('uid').then((id) => {
+      getQuizByDifficulty(id, difficulty).then((q) => {
+        this.setModalVisible();
+        this.props.navigation.navigate(ScreensLabel.labels.GAME, { quiz: q });
+      });
     });
   }
   render() {

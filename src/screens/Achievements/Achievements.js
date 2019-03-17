@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, AsyncStorage } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { Header, SearchBar } from 'react-native-elements';
 import { FlatGrid } from 'react-native-super-grid';
@@ -25,15 +25,16 @@ class Achievements extends Component {
       search: '',
     };
   }
-  componentDidMount() {
-    const UID = this.props.navigation.getParam('uid', '');
-    getAchievements(UID).then((list) => {
-      if (!list.message) {
-        this.setState({
-          rawList: list,
-          displayedList: list
-        });
-      }
+  componentWillMount() {
+    AsyncStorage.getItem('uid').then((id) => {
+      getAchievements(id).then((list) => {
+        if (!list.message) {
+          this.setState({
+            rawList: list,
+            displayedList: list
+          });
+        }
+      });
     });
   }
   updateSearch = (search) => {

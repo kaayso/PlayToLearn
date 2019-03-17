@@ -40,173 +40,49 @@ const drawerConfig = {
   contentComponent: ({ props }) => (<MenuDrawer {...props} />)
 };
 
-const homeNavigator = createDrawerNavigator({
-  Home: {
+const menuNavigator = createDrawerNavigator({
+  Start: {
     screen: Home,
-  },
-  Profile: {
-    screen: Profile,
-  },
-  Settings: {
-    screen: Settings,
+    navigationOptions: {
+      header: null
+    }
   },
   Challenge: {
     screen: Challenge,
+    navigationOptions: {
+      header: null
+    }
   },
   Friends: {
     screen: Friends,
+    navigationOptions: {
+      header: null
+    }
   },
   Achievements: {
     screen: Achievements,
-  },
-  Ranking: {
-    screen: Ranking,
-  },
-}, drawerConfig);
-
-const settingsNavigator = createDrawerNavigator({
-  Settings: {
-    screen: Settings,
-  },
-  Home: {
-    screen: Home,
-  },
-  Profile: {
-    screen: Profile,
-  },
-  Challenge: {
-    screen: Challenge,
-  },
-  Friends: {
-    screen: Friends,
-  },
-  Achievements: {
-    screen: Achievements,
-  },
-  Ranking: {
-    screen: Ranking,
-  },
-}, drawerConfig);
-
-const profileNavigator = createDrawerNavigator({
-  Profile: {
-    screen: Profile,
+    navigationOptions: {
+      header: null
+    }
   },
   Settings: {
     screen: Settings,
-  },
-  Home: {
-    screen: Home,
-  },
-
-  Challenge: {
-    screen: Challenge,
-  },
-  Friends: {
-    screen: Friends,
-  },
-  Achievements: {
-    screen: Achievements,
-  },
-  Ranking: {
-    screen: Ranking,
-  },
-}, drawerConfig);
-
-const challengeNavigator = createDrawerNavigator({
-  Challenge: {
-    screen: Challenge,
-  },
-  Settings: {
-    screen: Settings,
-  },
-  Home: {
-    screen: Home,
+    navigationOptions: {
+      header: null
+    }
   },
   Profile: {
     screen: Profile,
-  },
-  Friends: {
-    screen: Friends,
-  },
-  Achievements: {
-    screen: Achievements,
+    navigationOptions: {
+      header: null
+    }
   },
   Ranking: {
     screen: Ranking,
-  },
-}, drawerConfig);
-
-const friendsNavigator = createDrawerNavigator({
-  Friends: {
-    screen: Friends,
-  },
-  Settings: {
-    screen: Settings,
-  },
-  Home: {
-    screen: Home,
-  },
-  Profile: {
-    screen: Profile,
-  },
-  Challenge: {
-    screen: Challenge,
-  },
-  Achievements: {
-    screen: Achievements,
-  },
-  Ranking: {
-    screen: Ranking,
-  },
-}, drawerConfig);
-
-const achievementsNavigator = createDrawerNavigator({
-  Achievements: {
-    screen: Achievements,
-  },
-  Settings: {
-    screen: Settings,
-  },
-  Home: {
-    screen: Home,
-  },
-  Profile: {
-    screen: Profile,
-  },
-  Challenge: {
-    screen: Challenge,
-  },
-  Friends: {
-    screen: Friends,
-  },
-  Ranking: {
-    screen: Ranking,
-  },
-}, drawerConfig);
-
-const rankingNavigator = createDrawerNavigator({
-  Ranking: {
-    screen: Ranking,
-  },
-  Achievements: {
-    screen: Achievements,
-  },
-  Settings: {
-    screen: Settings,
-  },
-  Home: {
-    screen: Home,
-  },
-  Profile: {
-    screen: Profile,
-  },
-  Challenge: {
-    screen: Challenge,
-  },
-  Friends: {
-    screen: Friends,
-  },
+    navigationOptions: {
+      header: null
+    }
+  }
 }, drawerConfig);
 
 const appNavigator = createStackNavigator({
@@ -217,43 +93,7 @@ const appNavigator = createStackNavigator({
     }
   },
   Start: {
-    screen: homeNavigator,
-    navigationOptions: {
-      header: null
-    }
-  },
-  Challenge: {
-    screen: challengeNavigator,
-    navigationOptions: {
-      header: null
-    }
-  },
-  Friends: {
-    screen: friendsNavigator,
-    navigationOptions: {
-      header: null
-    }
-  },
-  Achievements: {
-    screen: achievementsNavigator,
-    navigationOptions: {
-      header: null
-    }
-  },
-  Settings: {
-    screen: settingsNavigator,
-    navigationOptions: {
-      header: null
-    }
-  },
-  Profile: {
-    screen: profileNavigator,
-    navigationOptions: {
-      header: null
-    }
-  },
-  Ranking: {
-    screen: rankingNavigator,
+    screen: menuNavigator,
     navigationOptions: {
       header: null
     }

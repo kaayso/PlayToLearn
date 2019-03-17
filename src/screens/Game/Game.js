@@ -7,11 +7,13 @@ import {
     ScrollView,
     Image,
     TouchableHighlight,
-    BackHandler
+    BackHandler,
+    AsyncStorage
 } from 'react-native';
 import { Spinner } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import { Header } from 'react-native-elements';
+
 import CloseButton from '../../components/CloseButton/CloseButton';
 import Timer from '../../components/Timer/Timer';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
@@ -47,14 +49,15 @@ class Game extends Component {
             isLoading: true
         };
     }
-    componentDidMount() {
+    componentWillMount() {
         this.intervalId = setInterval(this.timer.bind(this), 1000);
-        const UID = this.props.navigation.getParam('uid', null);
-        getUserById(UID).then((u) => {
-            this.setState({
-                quizPicked: this.props.navigation.getParam('quiz', null),
-                user: u,
-                isLoading: false
+        AsyncStorage.getItem('uid').then((id) => {
+            getUserById(id).then((u) => {
+                this.setState({
+                    quizPicked: this.props.navigation.getParam('quiz', null),
+                    user: u,
+                    isLoading: false
+                });
             });
         });
         // Disable hardware back button
