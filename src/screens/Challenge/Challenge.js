@@ -21,6 +21,7 @@ import QuizList from '../../components/QuizList/QuizList';
 import {
   getChallengeHistory,
   filterHistoryChallengeList,
+  getUserNotifications
 } from '../../utils/game/gameutils';
 import Layout from '../../constants/Layout';
 import Logo from '../../utils/logo/otherslogo';
@@ -35,10 +36,28 @@ class Challenge extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      challengeHistory: []
+      challengeHistory: [],
+      notificationsCount: null
     };
   }
   componentWillMount() {
+    this.setupHistoryChallenge();
+    this.getNotifications();
+    this.intervalId = setInterval(this.getNotifications.bind(this), 6000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+  getNotifications() {
+    AsyncStorage.getItem('uid').then((id) => {
+      getUserNotifications(id).then((notif) => {
+        this.setState({
+          notificationsCount: notif.length
+        });
+      });
+    });
+  }
+  setupHistoryChallenge() {
     AsyncStorage.getItem('uid').then((id) => {
       getChallengeHistory(id).then((history) => {
         // test if no empty
@@ -54,6 +73,8 @@ class Challenge extends Component {
     this.setState({
       modalVisible: !this.state.modalVisible
     });
+    // Refresh List
+    this.setupHistoryChallenge();
   }
   render() {
     return (
@@ -71,6 +92,7 @@ class Challenge extends Component {
             <NavBarButton
               iconName='notifications'
               navigationTo={ScreensLabel.labels.NOTIFICATIONS}
+              notificationsCount={this.state.notificationsCount}
             />
           }
         />

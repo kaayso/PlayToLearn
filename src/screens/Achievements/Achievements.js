@@ -9,7 +9,7 @@ import Colors from '../../constants/Colors';
 import MenuButton from '../../components/MenuButton/MenuButton';
 import NavBarButton from '../../components/NavBarButton/NavBarButton';
 import ScreensLabel from '../../utils/labels/screensLabel';
-import { getAchievements } from '../../utils/game/gameutils';
+import { getAchievements, getUserNotifications } from '../../utils/game/gameutils';
 import Layout from '../../constants/Layout';
 import TrophiesWon from '../../components/TrophiesWon/TrophiesWon';
 
@@ -23,6 +23,7 @@ class Achievements extends Component {
       rawList: [],
       displayedList: [],
       search: '',
+      notificationsCount: null
     };
   }
   componentWillMount() {
@@ -34,6 +35,20 @@ class Achievements extends Component {
             displayedList: list
           });
         }
+      });
+    });
+    this.getNotifications();
+    this.intervalId = setInterval(this.getNotifications.bind(this), 6000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+  getNotifications() {
+    AsyncStorage.getItem('uid').then((id) => {
+      getUserNotifications(id).then((notif) => {
+        this.setState({
+          notificationsCount: notif.length
+        });
       });
     });
   }
@@ -66,6 +81,7 @@ class Achievements extends Component {
             <NavBarButton
               iconName='notifications'
               navigationTo={ScreensLabel.labels.NOTIFICATIONS}
+              notificationsCount={this.state.notificationsCount}
             />
           }
         />

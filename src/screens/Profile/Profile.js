@@ -18,7 +18,7 @@ import MenuButton from '../../components/MenuButton/MenuButton';
 import NavBarButton from '../../components/NavBarButton/NavBarButton';
 import AvatarsManager from '../../utils/avatars/avatarsManager';
 import Screen from '../../utils/labels/screensLabel';
-import { getUserById } from '../../utils/game/gameutils';
+import { getUserById, getUserNotifications } from '../../utils/game/gameutils';
 import Fonts from '../../utils/fonts/Fonts';
 import Layout from '../../constants/Layout';
 import Bg from '../../utils/background/backgroundimages';
@@ -34,7 +34,8 @@ class Profile extends Component {
       user: null,
       rawStats: [],
       displayedStatsList: [],
-      search: ''
+      search: '',
+      notificationsCount: null
     };
   }
   componentWillMount() {
@@ -44,6 +45,20 @@ class Profile extends Component {
           user: u,
           displayedStatsList: u.scores.score_theme,
           rawStats: u.scores.score_theme,
+        });
+      });
+    });
+    this.getNotifications();
+    this.intervalId = setInterval(this.getNotifications.bind(this), 6000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+  getNotifications() {
+    AsyncStorage.getItem('uid').then((id) => {
+      getUserNotifications(id).then((notif) => {
+        this.setState({
+          notificationsCount: notif.length
         });
       });
     });
@@ -77,6 +92,7 @@ class Profile extends Component {
             <NavBarButton
               iconName='notifications'
               navigationTo={Screen.labels.NOTIFICATIONS}
+              notificationsCount={this.state.notificationsCount}
             />
           }
         />

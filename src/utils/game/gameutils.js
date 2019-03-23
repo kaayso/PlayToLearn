@@ -12,13 +12,38 @@ function addKeysToList(list) {
     return list;
 }
 /**
+ * add key field in each element of list by using id
+ * @param {Array} list 
+ */
+function addKeysId(list) {
+    for (let i = 0; i < list.length; i++) {
+        // eslint-disable-next-line no-underscore-dangle
+        list[i].key = list[i]._id;
+    }
+    return list;
+}
+/**
  * format from second into mm:ss format
  * @param {number} seconds 
  */
 function getTimeInMinutes(seconds) {
     return moment.utc(seconds * 1000).format('mm:ss');
 }
-
+/**
+ * get right format of date
+ * @param {String} date 
+ */
+function getDate(date) {
+    //2019-03-23T18:19:16.269Z
+    const year = date.substring(0, 4);
+    const day = date.substring(8, 10);
+    const month = date.substring(5, 7);
+    const hour = date.substring(11, 13);
+    const minutes = date.substring(14, 16);
+    const seconds = date.substring(17, 19);
+    
+    return moment().format(`${month} ${day} ${year}, ${hour}:${minutes}:${seconds} a`);
+}
 /**
  * Get challenge list for finished games
  * @param {Array} list 
@@ -226,6 +251,7 @@ const pushUserScore = async (uid, qid, sc, theme) => {
         pushUserAchievement(uid, theme, sc);
     }
     pushUserScoreQuiz(uid, qid, sc);
+    updateScores(uid, qid, theme, sc);
 };
 
 /**
@@ -280,6 +306,37 @@ const pushUserAchievement = async (uid, th, sc) => {
                 user_id: uid,
                 theme: th,
                 score: sc
+            }),
+        });
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
+ * udpate global score, score by theme and ranking
+ * @param {String} uid 
+ * @param {String} qId 
+ * @param {String} th 
+ */
+const updateScores = async (uid, qId, th, sc) => {
+    const url = `http://10.0.2.2:8000/scores/end-play/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                score: sc,
+                quizId: qId,
+                theme: th
             }),
         });
     try {
@@ -419,12 +476,138 @@ const addNewUser = async (uname, pwd, pic) => {
         console.log(`Fetch failed: ${e}`);
     }
 };
+/**
+ * Add a user as a friend
+ * @param {String} uid 
+ * @param {String} fid 
+ */
+const addAFriend = async (uid, fid) => {
+    const url = `http://10.0.2.2:8000/friendList/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                friendId: fid,
+            }),
+        });
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+/**
+ * send score challenge
+ * @param {String} nid 
+ * @param {String} sc 
+ */
+const sendScoreChallenge = async (nid, sc) => {
+    const url = 'http://10.0.2.2:8000/challenges/challengeAfriend/acceptAChallenge';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                scoreChallenged: sc,
+                _id: nid,
+            }),
+        });
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+/**
+ * Notifications
+ */
+
+/**
+ * get user's notifications by using his id
+ * @param {String} uid 
+ */
+const getUserNotifications = async (uid) => {
+    const url = `http://10.0.2.2:8000/notifications/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
+ * push a notification to notify an event
+ * @param {String} uid 
+ * @param {String} qId 
+ * @param {String} uidNotified 
+ * @param {String} sub 
+ */
+const pushNotification = async (uid, qId, uidNotified, sub) => {
+    const url = 'http://10.0.2.2:8000/notification';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id_notified: uidNotified,
+                user_id_who_notify: uid,
+                id_quiz: qId,
+                subject: sub
+            }),
+        });
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
+ * delete a notification by id
+ * @param {String} nid 
+ */
+const deleteNotification = async (nid) => {
+    const url = `http://10.0.2.2:8000/notification/${nid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url, { method: 'DELETE' });
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
 
 module.exports = {
     getTimeInMinutes,
     initAnswersList,
+    getDate,
     filterHistoryChallengeList,
     addKeysToList,
+    addKeysId,
     computeResult,
     getProgressCircleColor,
     getQuizById,
@@ -441,6 +624,11 @@ module.exports = {
     getWeeklyChallenge,
     getDailyChallenge,
     getChallengeHistory,
-    getAchievements
+    getAchievements,
+    getUserNotifications,
+    pushNotification,
+    deleteNotification,
+    sendScoreChallenge,
+    addAFriend
 };
 
