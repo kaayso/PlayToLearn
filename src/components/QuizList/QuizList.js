@@ -11,7 +11,8 @@ import {
     getNewQuiz,
     getRecommendedQuiz,
     getDailyChallenge,
-    getWeeklyChallenge
+    getWeeklyChallenge,
+    addKeysToList
 } from '../../utils/game/gameutils';
 import QuizListLabel from '../../utils/labels/quizList';
 
@@ -65,7 +66,7 @@ class QuizList extends Component {
             }
         });
     }
-    render() {
+    render() {        
         return (
             <View style={styles.container}>
                 <View style={styles.textContainer}>
@@ -73,7 +74,9 @@ class QuizList extends Component {
                     <Text style={styles.title}> {this.props.title}</Text>
                 </View>
                 {
+                    // eslint-disable-next-line no-nested-ternary
                     this.state.data ?
+                        (!this.state.data.message ?
                         <View style={styles.list}>
                             <FlatList
                                 horizontal
@@ -85,10 +88,10 @@ class QuizList extends Component {
                                             backgroundColor: Colors.blueThemeColor
                                         }}
                                     />}
-                                data={this.state.data}
+                                data={addKeysToList(this.state.data)}
                                 renderItem={({ item }) => <QuizItem item={item} />}
                             />
-                        </View> :
+                        </View> : <View />) :
                         <Spinner color="red" />
                 }
             </View>

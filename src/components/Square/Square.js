@@ -17,11 +17,13 @@ const Square = props => (
         style={{ width: 90, height: 90 }}
         source={props.img}
       />
-      <Text
-        style={styles.labelText}
-      >
-        {props.label}
-      </Text>
+      <View style={styles.labelTextContainer}>
+        <Text
+          style={styles.labelText}
+        >
+          {props.label}
+        </Text>
+      </View>
     </View>
   </TouchableHighlight>
 );
@@ -41,9 +43,20 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: 14,
     color: '#fff',
-    fontWeight: 'normal',
-    fontFamily: Fonts.OPENSANSBOLD,
+    fontWeight: '500',
+    fontFamily: Fonts.OPENSANSREGULAR,
     paddingTop: 5
+  },
+  labelTextContainer: {
+    position: 'absolute',
+    width: '100%',
+    bottom: 3,
+    height: 40,
+    alignItems: 'center',
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0, 0.3)'
   }
 });
 

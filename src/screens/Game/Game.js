@@ -24,11 +24,14 @@ import {
     initAnswersList,
     computeResult,
     getUserById,
-    pushUserScore
+    pushUserScore,
+    sendScoreChallenge,
+    deleteNotification
 } from '../../utils/game/gameutils';
 import CheckResults from '../../components/CheckResults/CheckResults';
 import ConfirmationMsg from '../../components/ConfirmationMsg/ConfirmationMsg';
 import QuizNotFound from '../../components/QuizNotFound/QuizNotFound';
+import Screens from '../../utils/labels/screensLabel';
 
 const GAME_TIME = 150; // 150 seconds 
 
@@ -115,16 +118,27 @@ class Game extends Component {
                     score :
                     this.state.quizResult
             });
-            pushUserScore(
-                // eslint-disable-next-line no-underscore-dangle
-                this.state.user._id,
-                // eslint-disable-next-line no-underscore-dangle
-                this.state.quizPicked._id,
-                score,
-                this.state.quizPicked.theme
-            );
+            this.pushScore(score);
         }
         return;
+    }
+    pushScore(score) {
+        pushUserScore(
+            // eslint-disable-next-line no-underscore-dangle
+            this.state.user._id,
+            // eslint-disable-next-line no-underscore-dangle
+            this.state.quizPicked._id,
+            score,
+            this.state.quizPicked.theme
+        );
+        // if this is a challenge push score on /accepteAChallenge
+        const notification = this.props.navigation.getParam('notification', null);        
+        if (notification) {
+            // eslint-disable-next-line no-underscore-dangle
+            deleteNotification(notification._id);
+            // eslint-disable-next-line no-underscore-dangle
+            sendScoreChallenge(notification.p_jObject._id, score);
+        }
     }
     previousQuestion() {
         if (this.state.currentQuestion > 0) {
@@ -155,7 +169,11 @@ class Game extends Component {
         this.setState({
             showConfirmationMsg: false
         });
-        this.props.navigation.goBack();
+        // push 0 as score for the current quiz
+        if (this.state.quizPicked) {
+            this.pushScore(0);
+        }
+        this.props.navigation.navigate(Screens.labels.START);
     }
     // Questions 200 caracteres 
     // Reponse 90 caracteres
@@ -389,7 +407,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     controlButtons: {
-        width: 100,
+        width: '30%',
         height: 40,
         padding: 5,
         borderRadius: 5,

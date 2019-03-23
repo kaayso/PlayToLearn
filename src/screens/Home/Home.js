@@ -12,7 +12,7 @@ import QuizList from '../../components/QuizList/QuizList';
 import GameCat from '../../utils/logo/gamecategories';
 import ChoiceDifficultyModal from '../../components/ChoiceDifficultyModal/ChoiceDifficultyModal';
 import QuizListButton from '../../components/QuizListButton/QuizListButton';
-import { getQuizByDifficulty } from '../../utils/game/gameutils';
+import { getQuizByDifficulty, getUserNotifications } from '../../utils/game/gameutils';
 import QuizListLabel from '../../utils/labels/quizList';
 
 class Home extends Component {
@@ -24,7 +24,24 @@ class Home extends Component {
     this.state = {
       modalVisible: false,
       openQList: false,
+      notificationsCount: null
     };
+  }
+  componentWillMount() {
+    this.getNotifications();
+    this.intervalId = setInterval(this.getNotifications.bind(this), 10000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+  getNotifications() {
+    AsyncStorage.getItem('uid').then((id) => {
+      getUserNotifications(id).then((notif) => {
+        this.setState({
+          notificationsCount: notif.length
+        });
+      });
+    });
   }
   setModalVisible() {
     this.setState({
@@ -44,7 +61,7 @@ class Home extends Component {
       });
     });
   }
-  render() {
+  render() {    
     return (
       <View style={{ flex: 1 }}>
         <Header
@@ -60,6 +77,7 @@ class Home extends Component {
             <NavBarButton
               iconName='notifications'
               navigationTo={ScreensLabel.labels.NOTIFICATIONS}
+              notificationsCount={this.state.notificationsCount}
             />
           }
         />
