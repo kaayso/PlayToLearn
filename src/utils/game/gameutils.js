@@ -2,36 +2,54 @@
 const moment = require('moment');
 /**
  * add key field in each element of list
- * @param {Array} list 
+ * @param {Array} list
  */
 function addKeysToList(list) {
-    for (let i = 0; i < list.length; i++) {
-        // eslint-disable-next-line no-underscore-dangle
-        list[i].key = JSON.stringify(i);
+    if (list) {
+        for (let i = 0; i < list.length; i++) {
+            // eslint-disable-next-line no-underscore-dangle
+            list[i].key = JSON.stringify(i);
+        }
     }
     return list;
 }
 /**
- * add key field in each element of list by using id
- * @param {Array} list 
+ * filter list, remove empty items
+ * @param {Array} list
  */
-function addKeysId(list) {
+function filterEmptyItems(list) {
+    const result = [];
     for (let i = 0; i < list.length; i++) {
         // eslint-disable-next-line no-underscore-dangle
-        list[i].key = list[i]._id;
+        if (list[i].user.length !== 0) {
+            result.push(list[i]);
+        }
+    }
+    return result;
+}
+/**
+ * add key field in each element of list by using id
+ * @param {Array} list
+ */
+function addKeysId(list) {
+    if (list) {
+        for (let i = 0; i < list.length; i++) {
+            // eslint-disable-next-line no-underscore-dangle
+            list[i].key = list[i]._id;
+        }
     }
     return list;
 }
 /**
  * format from second into mm:ss format
- * @param {number} seconds 
+ * @param {number} seconds
  */
 function getTimeInMinutes(seconds) {
     return moment.utc(seconds * 1000).format('mm:ss');
 }
 /**
  * get right format of date
- * @param {String} date 
+ * @param {String} date
  */
 function getDate(date) {
     //2019-03-23T18:19:16.269Z
@@ -41,12 +59,12 @@ function getDate(date) {
     const hour = date.substring(11, 13);
     const minutes = date.substring(14, 16);
     const seconds = date.substring(17, 19);
-    
+
     return moment().format(`${month} ${day} ${year}, ${hour}:${minutes}:${seconds} a`);
 }
 /**
  * Get challenge list for finished games
- * @param {Array} list 
+ * @param {Array} list
  */
 function filterHistoryChallengeList(list) {
     return list.filter(elmt =>
@@ -67,7 +85,7 @@ function initAnswersList() {
 
 /**
  * Get progress circle color
- * @param {number} result 
+ * @param {number} result
  */
 function getProgressCircleColor(result) {
     if (result < 5) {
@@ -80,8 +98,8 @@ function getProgressCircleColor(result) {
 
 /**
  * Check user answers and compute result according to correct answers list
- * @param {Array of number} correctAnswers 
- * @param {Array of number} userAnswers 
+ * @param {Array of number} correctAnswers
+ * @param {Array of number} userAnswers
  */
 function computeResult(correctAnswers, userAnswers) {
     let result = 0;
@@ -105,7 +123,7 @@ function computeResult(correctAnswers, userAnswers) {
 
 /**
  * get quiz object by using his id
- * @param {String} quizId 
+ * @param {String} quizId
  * @return promise
  */
 const getQuizById = async (quizId) => {
@@ -170,7 +188,7 @@ const getWeeklyChallenge = async () => {
 
 /**
  * get a quizz according to the difficulty
- * @param {String} uid 
+ * @param {String} uid
  * @param {String} diff
  */
 const getQuizByDifficulty = async (uid, diff) => {
@@ -187,7 +205,7 @@ const getQuizByDifficulty = async (uid, diff) => {
 
 /**
  * get the most played quiz
- * @param {String} uid 
+ * @param {String} uid
  * @param {Number} quantity
  * @return promise
  */
@@ -205,7 +223,7 @@ const getQuizMostPlayed = async (uid, quantity) => {
 
 /**
  * get the last added quiz
- * @param {String} uid 
+ * @param {String} uid
  * @param {Number} quantity
  * @return promise
  */
@@ -223,7 +241,7 @@ const getNewQuiz = async (uid, quantity) => {
 
 /**
  * get recommended quiz
- * @param {String} uid 
+ * @param {String} uid
  * @param {Number} quantity
  * @return promise
  */
@@ -241,9 +259,9 @@ const getRecommendedQuiz = async (uid, quantity) => {
 
 /**
  * push user score at the end of the quiz
- * @param {String} uid 
- * @param {String} qid 
- * @param {String} sc 
+ * @param {String} uid
+ * @param {String} qid
+ * @param {String} sc
  * @param {String} theme
  */
 const pushUserScore = async (uid, qid, sc, theme) => {
@@ -256,9 +274,9 @@ const pushUserScore = async (uid, qid, sc, theme) => {
 
 /**
  * push user score quiz
- * @param {String} uid 
- * @param {String} qid 
- * @param {String} sc 
+ * @param {String} uid
+ * @param {String} qid
+ * @param {String} sc
  */
 const pushUserScoreQuiz = async (uid, qid, sc) => {
     const url = `http://10.0.2.2:8000/scores/score_quiz/${uid}`;
@@ -287,9 +305,9 @@ const pushUserScoreQuiz = async (uid, qid, sc) => {
 
 /**
  * push user achievement
- * @param {String} uid 
- * @param {String} th 
- * @param {Number} sc 
+ * @param {String} uid
+ * @param {String} th
+ * @param {Number} sc
  */
 const pushUserAchievement = async (uid, th, sc) => {
     const url = 'http://10.0.2.2:8000/achievement';
@@ -318,9 +336,9 @@ const pushUserAchievement = async (uid, th, sc) => {
 
 /**
  * udpate global score, score by theme and ranking
- * @param {String} uid 
- * @param {String} qId 
- * @param {String} th 
+ * @param {String} uid
+ * @param {String} qId
+ * @param {String} th
  */
 const updateScores = async (uid, qId, th, sc) => {
     const url = `http://10.0.2.2:8000/scores/end-play/${uid}`;
@@ -369,7 +387,7 @@ const getAllUsers = async () => {
 
 /**
  * get user object by using his id
- * @param {String} uid 
+ * @param {String} uid
  */
 const getUserById = async (uid) => {
     const url = `http://10.0.2.2:8000/users/${uid}`;
@@ -385,7 +403,7 @@ const getUserById = async (uid) => {
 
 /**
  * get user's challenge history by using his id
- * @param {String} uid 
+ * @param {String} uid
  */
 const getChallengeHistory = async (uid) => {
     const url = `http://10.0.2.2:8000/challenges/getHistoric/${uid}`;
@@ -401,7 +419,7 @@ const getChallengeHistory = async (uid) => {
 
 /**
  * get user's achievements by using his id
- * @param {String} uid 
+ * @param {String} uid
  */
 const getAchievements = async (uid) => {
     const url = `http://10.0.2.2:8000/achievements/${uid}`;
@@ -417,8 +435,8 @@ const getAchievements = async (uid) => {
 
 /**
  * get User object from username/password
- * @param {String} uname 
- * @param {String} pwd 
+ * @param {String} uname
+ * @param {String} pwd
  */
 const userAuthentication = async (uname, pwd) => {
     const url = 'http://10.0.2.2:8000/users/authentication';
@@ -446,9 +464,9 @@ const userAuthentication = async (uname, pwd) => {
 
 /**
  * Add new user to db
- * @param {String} uname 
- * @param {String} pwd 
- * @param {String} pic 
+ * @param {String} uname
+ * @param {String} pwd
+ * @param {String} pic
  */
 const addNewUser = async (uname, pwd, pic) => {
     const url = 'http://10.0.2.2:8000/users';
@@ -470,7 +488,7 @@ const addNewUser = async (uname, pwd, pic) => {
     try {
         const json = await response.json();
         // status: 201 => added
-        // status: 409 => conflict        
+        // status: 409 => conflict
         return { status: response.status, user: json };
     } catch (e) {
         console.log(`Fetch failed: ${e}`);
@@ -478,8 +496,8 @@ const addNewUser = async (uname, pwd, pic) => {
 };
 /**
  * Add a user as a friend
- * @param {String} uid 
- * @param {String} fid 
+ * @param {String} uid
+ * @param {String} fid
  */
 const addAFriend = async (uid, fid) => {
     const url = `http://10.0.2.2:8000/friendList/${uid}`;
@@ -505,8 +523,8 @@ const addAFriend = async (uid, fid) => {
 };
 /**
  * send score challenge
- * @param {String} nid 
- * @param {String} sc 
+ * @param {String} nid
+ * @param {String} sc
  */
 const sendScoreChallenge = async (nid, sc) => {
     const url = 'http://10.0.2.2:8000/challenges/challengeAfriend/acceptAChallenge';
@@ -537,7 +555,7 @@ const sendScoreChallenge = async (nid, sc) => {
 
 /**
  * get user's notifications by using his id
- * @param {String} uid 
+ * @param {String} uid
  */
 const getUserNotifications = async (uid) => {
     const url = `http://10.0.2.2:8000/notifications/${uid}`;
@@ -553,10 +571,10 @@ const getUserNotifications = async (uid) => {
 
 /**
  * push a notification to notify an event
- * @param {String} uid 
- * @param {String} qId 
- * @param {String} uidNotified 
- * @param {String} sub 
+ * @param {String} uid
+ * @param {String} qId
+ * @param {String} uidNotified
+ * @param {String} sub
  */
 const pushNotification = async (uid, qId, uidNotified, sub) => {
     const url = 'http://10.0.2.2:8000/notification';
@@ -586,7 +604,7 @@ const pushNotification = async (uid, qId, uidNotified, sub) => {
 
 /**
  * delete a notification by id
- * @param {String} nid 
+ * @param {String} nid
  */
 const deleteNotification = async (nid) => {
     const url = `http://10.0.2.2:8000/notification/${nid}`;
@@ -601,10 +619,71 @@ const deleteNotification = async (nid) => {
     }
 };
 
+/**
+ * update a user object by using his id
+ * @param {String} uname
+ * @param {String} pwd
+ * @param {String} pic
+ * @param {String} uid
+ */
+const updateUser = async (uid, uname, pwd, pic) => {
+    const url = `http://10.0.2.2:8000/users/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: uid,
+                username: uname,
+                password: pwd,
+                picture: pic
+            }),
+        });
+    try {
+        const json = await response.json();
+        // status: 201 => added
+        // status: 409 => conflict
+        return { status: response.status, user: json };
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+const getTopScore = async () => {
+    const url = 'http://10.0.2.2:8000/scores/top';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+const getTopScoreByEveryTheme = async () => {
+    const url = 'http://10.0.2.2:8000/scores/topBytheme';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+
 module.exports = {
     getTimeInMinutes,
     initAnswersList,
     getDate,
+    filterEmptyItems,
     filterHistoryChallengeList,
     addKeysToList,
     addKeysId,
@@ -629,6 +708,8 @@ module.exports = {
     pushNotification,
     deleteNotification,
     sendScoreChallenge,
-    addAFriend
+    addAFriend,
+    updateUser,
+    getTopScore,
+    getTopScoreByEveryTheme
 };
-
