@@ -5,9 +5,24 @@ const moment = require('moment');
  * @param {Array} list
  */
 function addKeysToList(list) {
+    if (list) {
+        for (let i = 0; i < list.length; i++) {
+            // eslint-disable-next-line no-underscore-dangle
+            list[i].key = JSON.stringify(i);
+        }
+    }
+    return list;
+}
+/**
+ * filter list, remove empty items
+ * @param {Array} list
+ */
+function filterEmptyItems(list) {
     for (let i = 0; i < list.length; i++) {
         // eslint-disable-next-line no-underscore-dangle
-        list[i].key = JSON.stringify(i);
+        if (list[i].user.length === 0) {
+            list.splice(list.indexOf(list[i]), 1);
+        }
     }
     return list;
 }
@@ -16,9 +31,11 @@ function addKeysToList(list) {
  * @param {Array} list
  */
 function addKeysId(list) {
-    for (let i = 0; i < list.length; i++) {
-        // eslint-disable-next-line no-underscore-dangle
-        list[i].key = list[i]._id;
+    if (list) {
+        for (let i = 0; i < list.length; i++) {
+            // eslint-disable-next-line no-underscore-dangle
+            list[i].key = list[i]._id;
+        }
     }
     return list;
 }
@@ -608,7 +625,7 @@ const deleteNotification = async (nid) => {
  * @param {String} pic
  * @param {String} uid
  */
-const updateUser = async ( uid, uname, pwd, pic) => {
+const updateUser = async (uid, uname, pwd, pic) => {
     const url = `http://10.0.2.2:8000/users/${uid}`;
     // eslint-disable-next-line no-undef
     const response = await fetch(
@@ -636,11 +653,36 @@ const updateUser = async ( uid, uname, pwd, pic) => {
     }
 };
 
+const getTopScore = async () => {
+    const url = 'http://10.0.2.2:8000/scores/top';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+const getTopScoreByEveryTheme = async () => {
+    const url = 'http://10.0.2.2:8000/scores/topBytheme';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
 
 module.exports = {
     getTimeInMinutes,
     initAnswersList,
     getDate,
+    filterEmptyItems,
     filterHistoryChallengeList,
     addKeysToList,
     addKeysId,
@@ -666,5 +708,7 @@ module.exports = {
     deleteNotification,
     sendScoreChallenge,
     addAFriend,
-    updateUser
+    updateUser,
+    getTopScore,
+    getTopScoreByEveryTheme
 };

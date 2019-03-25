@@ -50,7 +50,7 @@ export default class Dashboard extends Component {
     if (screen === 'Login') {
       this.handleVisibilityAction();
     } else {
-      this.props.navigation.navigate(screen, { uid: this.state.uid });
+      this.props.navigation.navigate(screen);
     }
   }
   render() {
