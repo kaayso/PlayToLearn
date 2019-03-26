@@ -61,7 +61,8 @@ class Home extends Component {
       });
     });
   }
-  render() {    
+  
+  render() {
     return (
       <View style={{ flex: 1 }}>
         <Header

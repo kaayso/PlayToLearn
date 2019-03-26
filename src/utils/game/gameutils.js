@@ -1,5 +1,8 @@
 /* eslint-disable no-param-reassign */
 const moment = require('moment');
+/* eslint-disable no-param-reassign */
+const momentTz = require('moment-timezone');
+
 /**
  * add key field in each element of list
  * @param {Array} list
@@ -52,15 +55,7 @@ function getTimeInMinutes(seconds) {
  * @param {String} date
  */
 function getDate(date) {
-    //2019-03-23T18:19:16.269Z
-    const year = date.substring(0, 4);
-    const day = date.substring(8, 10);
-    const month = date.substring(5, 7);
-    const hour = date.substring(11, 13);
-    const minutes = date.substring(14, 16);
-    const seconds = date.substring(17, 19);
-
-    return moment().format(`${month} ${day} ${year}, ${hour}:${minutes}:${seconds} a`);
+    return momentTz(date).tz('Europe/Paris').format('YYYY-MM-DD HH:mm');
 }
 /**
  * Get challenge list for finished games
@@ -549,6 +544,41 @@ const sendScoreChallenge = async (nid, sc) => {
         console.log(`Fetch failed: ${e}`);
     }
 };
+
+
+/**
+ * send score challenge
+ * @param {String} nid
+ * @param {String} friendId
+ * @param {String} quizId
+ * @param {String} sc
+ */
+const launchAChallengeFriend = async (nid, friendId, qId, sc) => {
+    const url = 'http://10.0.2.2:8000/challenges/challengeAfriend/launchAChallenge';
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                challengerId: nid,
+                challengedId: friendId,
+                quizId: qId,
+                scoreChallenger: sc
+            }),
+        });
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
 /**
  * Notifications
  */
@@ -679,6 +709,50 @@ const getTopScoreByEveryTheme = async () => {
 };
 
 
+/**
+ * Delete  Friend to db
+ * @param {String} uid
+ * @param {String} friendId
+ */
+const deleteFriend = async (uid, fId) => {
+    const url = `http://10.0.2.2:8000/friendList/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(
+        url,
+        {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                friendId: fId
+            }),
+        });
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
+/**
+ * get FriendList object by using its id
+ * @param {String} uid
+ */
+const getFriendListById = async (uid) => {
+    const url = `http://10.0.2.2:8000/friendList/${uid}`;
+    // eslint-disable-next-line no-undef
+    const response = await fetch(url);
+    try {
+        const json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(`Fetch failed: ${e}`);
+    }
+};
+
 module.exports = {
     getTimeInMinutes,
     initAnswersList,
@@ -711,5 +785,8 @@ module.exports = {
     addAFriend,
     updateUser,
     getTopScore,
-    getTopScoreByEveryTheme
+    getTopScoreByEveryTheme,
+    deleteFriend,
+    getFriendListById,
+    launchAChallengeFriend
 };

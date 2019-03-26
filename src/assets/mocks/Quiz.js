@@ -2,7 +2,7 @@
 /* eslint-disable global-require */
 export default [
     {
-        name: 'javaScript',
+        name: 'javascript',
         key: '6',
         image: require('./QuizImages/javascript.png')
     },
