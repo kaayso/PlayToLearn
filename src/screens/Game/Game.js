@@ -26,14 +26,15 @@ import {
     getUserById,
     pushUserScore,
     sendScoreChallenge,
-    deleteNotification
+    deleteNotification,
+    launchAChallengeFriend
 } from '../../utils/game/gameutils';
 import CheckResults from '../../components/CheckResults/CheckResults';
 import ConfirmationMsg from '../../components/ConfirmationMsg/ConfirmationMsg';
 import QuizNotFound from '../../components/QuizNotFound/QuizNotFound';
 import Screens from '../../utils/labels/screensLabel';
 
-const GAME_TIME = 150; // 150 seconds 
+const GAME_TIME = 150; // 150 seconds
 
 class Game extends Component {
     constructor(props) {
@@ -107,7 +108,7 @@ class Game extends Component {
                 currentQuestion: this.state.currentQuestion + 1,
             });
         } else {
-            // move to results vue        
+            // move to results vue
             // clear interval timer
             // send score
             const score = computeResult(this.state.quizPicked.answers, this.state.resposesChoosed);
@@ -132,12 +133,20 @@ class Game extends Component {
             this.state.quizPicked.theme
         );
         // if this is a challenge push score on /accepteAChallenge
-        const notification = this.props.navigation.getParam('notification', null);        
+        const notification = this.props.navigation.getParam('notification', null);
         if (notification) {
             // eslint-disable-next-line no-underscore-dangle
             deleteNotification(notification._id);
             // eslint-disable-next-line no-underscore-dangle
             sendScoreChallenge(notification.p_jObject._id, score);
+        }
+
+        const challengeFriend = this.props.navigation.getParam('friendId', null);
+        if (challengeFriend) {
+          AsyncStorage.getItem('uid').then((id) => {
+              // eslint-disable-next-line no-underscore-dangle
+              launchAChallengeFriend(id, challengeFriend, this.state.quizPicked._id, score);
+          });
         }
     }
     previousQuestion() {
@@ -175,7 +184,7 @@ class Game extends Component {
         }
         this.props.navigation.navigate(Screens.labels.START);
     }
-    // Questions 200 caracteres 
+    // Questions 200 caracteres
     // Reponse 90 caracteres
     render() {
         return (
@@ -416,4 +425,3 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.4)'
     }
 });
-
