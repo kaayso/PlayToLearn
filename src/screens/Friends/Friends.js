@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Alert, AppRegistry, Button, FlatList, TouchableHighlight, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Button, FlatList, TouchableHighlight, AsyncStorage } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import { Header, SearchBar, ListItem } from 'react-native-elements';
+import { Header, SearchBar } from 'react-native-elements';
+import _values from 'lodash/values';
+
 import Colors from '../../constants/Colors';
 import MenuButton from '../../components/MenuButton/MenuButton';
 import NavBarButton from '../../components/NavBarButton/NavBarButton';
-import FriendItem from '../../components/FriendItem/FriendItem'
-import SearchFriend from '../../components/SearchFriend/SearchFriend'
+import FriendItem from '../../components/FriendItem/FriendItem';
+import SearchFriend from '../../components/SearchFriend/SearchFriend';
 import ScreensLabel from '../../utils/labels/screensLabel';
-import _values from 'lodash/values';
-import avatarsManager from '../../utils/avatars/avatarsManager';
-import { getFriendListById } from '../../utils/game/gameutils';
-import {
-  getUserNotifications
-} from '../../utils/game/gameutils';
-
+import { getFriendListById, getUserNotifications } from '../../utils/game/gameutils';
 
 class Friends extends Component {
   static navigationOptions = {
@@ -34,13 +30,29 @@ class Friends extends Component {
     };
     this.arrayholder = [];
   }
+
   componentWillMount() {
     this.getNotifications();
     this.intervalId = setInterval(this.getNotifications.bind(this), 6000);
+    this.setState({ loading: true });
+    AsyncStorage.getItem('uid').then((id) => {
+      getFriendListById(id).then((u) => {
+        this.setState({
+          // eslint-disable-next-line no-underscore-dangle
+          user: u.filter((item) => item._id !== id),
+          loading: false,
+          refreshing: false,
+        });
+        // eslint-disable-next-line no-underscore-dangle
+        this.arrayholder = u.filter((item) => item._id !== id);
+      });
+    });
   }
+
   componentWillUnmount() {
     clearInterval(this.intervalId);
   }
+
   getNotifications() {
     AsyncStorage.getItem('uid').then((id) => {
       getUserNotifications(id).then((notif) => {
@@ -50,29 +62,6 @@ class Friends extends Component {
       });
     });
   }
-
-  componentDidMount() {
-      this.setState({ loading: true });
-        AsyncStorage.getItem('uid').then((id) => {
-          getFriendListById(id).then((u) => {
-              this.setState({
-                  // eslint-disable-next-line no-underscore-dangle
-                  user: u.filter((item) => item._id !== id),
-                  loading: false,
-                  refreshing: false,
-              });
-            this.arrayholder = u;
-          });
-        })
-  }
-
-  search = text => {
-    console.log(text);
-  };
-
-  clear = () => {
-    this.search.clear();
-  };
 
   setAddFriendVisible() {
     this.setState({
@@ -86,27 +75,18 @@ class Friends extends Component {
     });
   }
 
-
   refreshFlatList = (deletedKey) => {
-    this.setState((prevState) => {
-      return {
-        deletedRowKey: deletedKey
-      };
-    });
+    this.setState(() => ({
+      deletedRowKey: deletedKey
+    }));
   }
 
-  renderHeader = () => {
-    return (
-      <SearchBar
-        placeholder="Type Here..."
-        lightTheme
-        round
-        onChangeText={text => this.searchFilterFunction(text)}
-        onClear={text => this.searchFilterFunction('')}
-        autoCorrect={false}
-        value={this.state.search}
-      />
-    );
+  search = text => {
+    console.log(text);
+  };
+
+  clear = () => {
+    this.search.clear();
   };
 
   handleRefresh = () => {
@@ -117,80 +97,31 @@ class Friends extends Component {
     });
   };
 
-
   searchFilterFunction = text => {
     const newData = this.arrayholder.filter(item => {
       const itemData = `${item.username.toUpperCase()}
       ${item.username.toUpperCase()} ${item.username.toUpperCase()}`;
-       const textData = text.toUpperCase();
+      const textData = text.toUpperCase();
 
-       return itemData.indexOf(textData) > -1;
+      return itemData.indexOf(textData) > -1;
     });
-    this.setState({ user: newData, search:text, });
+    this.setState({ user: newData, search: text, });
   }
 
+  renderHeader = () => (
+    <SearchBar
+      placeholder="Type Here..."
+      lightTheme
+      round
+      onChangeText={text => this.searchFilterFunction(text)}
+      onClear={() => this.searchFilterFunction('')}
+      autoCorrect={false}
+      value={this.state.search}
+    />
+  );
 
   render() {
     if (this.state.user && this.state.user.length) {
-    return (
-      <View style={{ flex: 1 }}>
-        <Header
-          containerStyle={styles.headerStyle}
-          leftComponent={<MenuButton />}
-          centerComponent={
-            <NavBarButton
-              iconName='dashboard'
-              navigationTo={ScreensLabel.labels.DASHBOARD}
-            />
-          }
-          rightComponent={
-            <NavBarButton
-            iconName='notifications'
-            navigationTo={ScreensLabel.labels.NOTIFICATIONS}
-            notificationsCount={this.state.notificationsCount}
-            />
-          }
-        />
-        <View>
-          <SearchFriend
-            AddFriendVisibility={() => this.setAddFriendVisible()}
-            AddFriendVisible={this.state.AddFriendVisible}
-          />
-          <TouchableHighlight
-                style ={{
-                    height: 40,
-                    width:160,
-                    borderRadius:10,
-                    marginLeft :250,
-                    marginTop :10,
-                    marginBottom: 10
-                }}>
-            <Button
-              onPress={() => this.setAddFriendVisible()}
-              color="#88aac2"
-              title="Add new friend"
-              accessibilityLabel="Learn more about this button"
-              />
-          </TouchableHighlight>
-
-
-          <FlatList style={styles.list}
-            data={_values(this.state.user)}
-            keyExtractor={(item) => item._id}
-        		renderItem={({item, index})=>{
-        			return (
-          			<FriendItem item={item} index={index} parentFlatList={this} Users={this.state.user}>
-
-          			</FriendItem>);
-        	}}
-             ListHeaderComponent={this.renderHeader}
-             refreshing={this.state.refreshing}
-             onRefresh={this.handleRefresh}
-        	>
-        	</FlatList>
-        </View>
-      </View>
-    )} else{
       return (
         <View style={{ flex: 1 }}>
           <Header
@@ -206,6 +137,7 @@ class Friends extends Component {
               <NavBarButton
                 iconName='notifications'
                 navigationTo={ScreensLabel.labels.NOTIFICATIONS}
+                notificationsCount={this.state.notificationsCount}
               />
             }
           />
@@ -215,33 +147,95 @@ class Friends extends Component {
               AddFriendVisible={this.state.AddFriendVisible}
             />
             <TouchableHighlight
-                  style ={{
-                      height: 40,
-                      width:160,
-                      borderRadius:10,
-                      marginLeft :250,
-                      marginTop :10,
-                      marginBottom: 10
-                  }}>
+              style={{
+                height: 40,
+                width: 160,
+                borderRadius: 10,
+                marginLeft: 250,
+                marginTop: 10,
+                marginBottom: 10
+              }}
+            >
               <Button
                 onPress={() => this.setAddFriendVisible()}
                 color="#88aac2"
                 title="Add new friend"
                 accessibilityLabel="Learn more about this button"
-                />
+              />
             </TouchableHighlight>
 
-            <FlatList style={styles.list}
+
+            <FlatList
+              style={styles.list}
+              data={_values(this.state.user)}
+              // eslint-disable-next-line no-underscore-dangle
+              keyExtractor={(item) => item._id}
+              renderItem={({ item, index }) => (
+                <FriendItem
+                  item={item}
+                  index={index}
+                  parentFlatList={this}
+                  Users={this.state.user}
+                />
+              )}
               ListHeaderComponent={this.renderHeader}
               refreshing={this.state.refreshing}
               onRefresh={this.handleRefresh}
-          	>
-          	</FlatList>
-
+            />
           </View>
         </View>
       );
     }
+    return (
+      <View style={{ flex: 1 }}>
+        <Header
+          containerStyle={styles.headerStyle}
+          leftComponent={<MenuButton />}
+          centerComponent={
+            <NavBarButton
+              iconName='dashboard'
+              navigationTo={ScreensLabel.labels.DASHBOARD}
+            />
+          }
+          rightComponent={
+            <NavBarButton
+              iconName='notifications'
+              navigationTo={ScreensLabel.labels.NOTIFICATIONS}
+            />
+          }
+        />
+        <View>
+          <SearchFriend
+            AddFriendVisibility={() => this.setAddFriendVisible()}
+            AddFriendVisible={this.state.AddFriendVisible}
+          />
+          <TouchableHighlight
+            style={{
+              height: 40,
+              width: 160,
+              borderRadius: 10,
+              marginLeft: 250,
+              marginTop: 10,
+              marginBottom: 10
+            }}
+          >
+            <Button
+              onPress={() => this.setAddFriendVisible()}
+              color="#88aac2"
+              title="Add new friend"
+              accessibilityLabel="Learn more about this button"
+            />
+          </TouchableHighlight>
+
+          <FlatList
+            style={styles.list}
+            ListHeaderComponent={this.renderHeader}
+            refreshing={this.state.refreshing}
+            onRefresh={this.handleRefresh}
+          />
+        </View>
+      </View>
+    );
   }
 }
 
@@ -252,8 +246,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   list: {
-    marginTop: 2,
-    //backgroundColor:"#f5f5f5",
+    marginTop: 2
   },
   btn: {
     marginLeft: 5,
