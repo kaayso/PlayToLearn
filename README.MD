@@ -84,7 +84,7 @@ This project is set up to use [jest](https://facebook.github.io/jest/) for tests
 
 ## Debugging
 
-You can enable remote debugging mode in your simulator, web debugger will be available at this [address] (http://localhost:8081/debugger-ui/)
+You can enable remote debugging mode from your simulator, web debugger will be available at this address (http://localhost:8081/debugger-ui/)
 
 ## Customizing App Display Name
 

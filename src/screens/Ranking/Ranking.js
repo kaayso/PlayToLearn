@@ -99,7 +99,7 @@ class Ranking extends Component {
             />
           </View>
           <View style={styles.list}>
-            <Text style={styles.title}> TOP SCORE By Theme</Text>
+            <Text style={styles.title}> TOP SCORE By Topic</Text>
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
