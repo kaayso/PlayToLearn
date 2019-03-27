@@ -32,6 +32,8 @@ class Challenge extends Component {
   static navigationOptions = {
     header: null
   };
+  // eslint-disable-next-line react/sort-comp
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -46,14 +48,19 @@ class Challenge extends Component {
     this.intervalId = setInterval(this.getNotifications.bind(this), 6000);
   }
   componentWillUnmount() {
+    // eslint-disable-next-line no-underscore-dangle
+    this._isMounted = true;
     clearInterval(this.intervalId);
   }
   getNotifications() {
     AsyncStorage.getItem('uid').then((id) => {
       getUserNotifications(id).then((notif) => {
-        this.setState({
-          notificationsCount: notif.length
-        });
+        // eslint-disable-next-line no-underscore-dangle
+        if (!this._isMounted) {
+          this.setState({
+            notificationsCount: notif.length
+          });
+        }
       });
     });
   }
@@ -61,7 +68,8 @@ class Challenge extends Component {
     AsyncStorage.getItem('uid').then((id) => {
       getChallengeHistory(id).then((history) => {
         // test if no empty
-        if (!history.message) {
+        // eslint-disable-next-line no-underscore-dangle
+        if (!history.message && !this._isMounted) {
           this.setState({
             challengeHistory: filterHistoryChallengeList(history),
           });
