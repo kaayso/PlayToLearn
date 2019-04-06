@@ -1,4 +1,4 @@
-Play To Learn [React native application]
+Play To Learn [React native app]
 ===
 
 * Backend of our application [Play To Learn server](https://github.com/kaayso/quizz).
@@ -12,7 +12,7 @@ Use this command to install node_modules package.
 ## Usage
 
 #### `npm run android`
-Use this command to run the app of android device/emulator.
+Use this command to run the app on android device/emulator.
 
 ## Debugging
 
