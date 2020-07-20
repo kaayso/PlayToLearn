@@ -1,4 +1,6 @@
-# Play To Learn [React native app]
+## Project
+
+Play To Learn
 
 - Backend of our application [Play To Learn server](https://github.com/kaayso/quizz).
 - Web app version [Play To Learn web app](https://github.com/MedMoctar/Projet-Quiz).
