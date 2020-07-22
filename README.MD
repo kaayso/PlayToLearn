@@ -4,7 +4,7 @@ Play To Learn (Quiz app)
 
 Android app built with React-Native framework. Choose a subject, complete the quiz, improve your ranking, challenge your friends, etc...
 
-- Backend of our application [Play To Learn server](https://github.com/kaayso/quizz).
+- Backend of our application [Play To Learn server](https://github.com/thiernoMalalDiallo/quizz).
 - Web app version [Play To Learn web app](https://github.com/MedMoctar/Projet-Quiz).
 
 ## Project Screen Shot(s)
